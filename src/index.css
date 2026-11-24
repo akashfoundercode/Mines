@@ -261,6 +261,17 @@ body,
   overflow: hidden;
 }
 
+:root {
+  --nav-height: 86px;
+}
+
+/* Mobile landscape: sleek compact navbar so the game board gets maximum space with zero clipping */
+@media (max-height: 520px) {
+  :root {
+    --nav-height: 48px;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;

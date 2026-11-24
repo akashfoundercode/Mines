@@ -33,7 +33,7 @@ function SettingsMenu({ onResetDemo }) {
         aria-label="Settings"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+        className="relative flex items-center justify-center h-8 sm:h-11 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
       >
         <img
           src={settingIcon}
@@ -71,17 +71,17 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
   return (
     <>
       {/* Top Header: Floating prominently with ALL items matching one uniform large size */}
-      <header className="relative z-20 w-full bg-transparent pt-1 sm:pt-2 px-2 sm:px-4 md:px-6">
-        <div className="mx-auto flex h-[58px] sm:h-[68px] md:h-[78px] max-w-[1400px] items-center justify-between gap-1.5 sm:gap-3 md:gap-4">
+      <header className="relative z-20 w-full bg-transparent pt-0.5 sm:pt-2 px-1.5 sm:px-4 md:px-6">
+        <div className="mx-auto flex h-9 sm:h-12 md:h-[72px] lg:h-[78px] max-w-[1400px] items-center justify-between gap-1 sm:gap-2.5 md:gap-4">
           {/* Left section: [1] Arrow Button (Enlarged) + [2] Leaderboard.png as Logo */}
-          <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Back Button (Left Arrow Button.png) - Enlarged to match uniform height */}
             <div className="relative flex items-center shrink-0">
               <button
                 type="button"
                 aria-label="Back"
                 onClick={() => window.history.length > 1 && window.history.back()}
-                className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+                className="relative flex items-center justify-center h-8 sm:h-11 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
               >
                 <img
                   src={leftArrowBtn}
@@ -96,19 +96,19 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
               <img
                 src={leaderboardLogo}
                 alt="Logo"
-                className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[260px] object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] drop-shadow-[0_0_20px_rgba(255,193,7,0.35)] select-none transition-transform hover:scale-105"
+                className="h-8 sm:h-11 md:h-16 lg:h-18 w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] drop-shadow-[0_0_20px_rgba(255,193,7,0.35)] select-none transition-transform hover:scale-105"
               />
             </div>
           </div>
 
           {/* Right section: Lobby + Leader Board + Balances + Sound + Settings */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3.5 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-3.5 shrink-0">
             {/* Lobby Button */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setActiveTab('lobby')}
-                className="relative overflow-hidden flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-6 text-xs sm:text-sm md:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+                className="relative overflow-hidden flex items-center justify-center gap-1 sm:gap-1.5 rounded-lg sm:rounded-2xl h-8 sm:h-11 md:h-16 lg:h-18 px-2 sm:px-3 md:px-5 lg:px-6 text-[10px] sm:text-xs md:text-sm lg:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
               >
                 <img
                   src={topBg}
@@ -116,8 +116,8 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 size-full object-fill select-none"
                 />
-                <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  <Crown className="size-4 sm:size-5 md:size-6 text-[#ffc107]" />
+                <span className="relative z-10 flex items-center gap-1 sm:gap-1.5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  <Crown className="size-3.5 sm:size-4 md:size-5 lg:size-6 text-[#ffc107]" />
                   <span>Lobby</span>
                 </span>
               </button>
@@ -128,7 +128,7 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
               <button
                 type="button"
                 onClick={() => setShowLeaderboard(true)}
-                className="relative overflow-hidden flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-6 text-xs sm:text-sm md:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+                className="relative overflow-hidden flex items-center justify-center gap-1 sm:gap-1.5 rounded-lg sm:rounded-2xl h-8 sm:h-11 md:h-16 lg:h-18 px-2 sm:px-3 md:px-5 lg:px-6 text-[10px] sm:text-xs md:text-sm lg:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
               >
                 <img
                   src={topBg}
@@ -136,8 +136,8 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 size-full object-fill select-none"
                 />
-                <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 text-[#ffe396] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  <Trophy className="size-4 sm:size-5 md:size-6 text-[#ffc107]" />
+                <span className="relative z-10 flex items-center gap-1 sm:gap-1.5 text-[#ffe396] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  <Trophy className="size-3.5 sm:size-4 md:size-5 lg:size-6 text-[#ffc107]" />
                   <span>Leader Board</span>
                 </span>
               </button>
@@ -145,20 +145,20 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
 
             {/* Balances Widget */}
             <div className="relative">
-              <div className="relative overflow-hidden flex items-center gap-2 sm:gap-2.5 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-5 shadow-[0_4px_14px_rgba(0,0,0,0.6)]">
+              <div className="relative overflow-hidden flex items-center gap-1.5 sm:gap-2.5 rounded-lg sm:rounded-2xl h-8 sm:h-11 md:h-16 lg:h-18 px-2 sm:px-3.5 md:px-5 shadow-[0_4px_14px_rgba(0,0,0,0.6)]">
                 <img
                   src={topBg}
                   alt=""
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 size-full object-fill select-none"
                 />
-                <div className="relative z-10 flex items-center gap-1.5 sm:gap-2.5">
-                  <Wallet className="size-4 sm:size-5 md:size-6 text-[#ffc107]" aria-hidden="true" />
+                <div className="relative z-10 flex items-center gap-1 sm:gap-2">
+                  <Wallet className="size-3.5 sm:size-4 md:size-5 lg:size-6 text-[#ffc107]" aria-hidden="true" />
                   <span className="text-xs sm:text-sm text-[#e6d0ba] font-bold hidden xl:inline drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
                     Balance:
                   </span>
                   <span
-                    className="text-sm sm:text-base md:text-lg font-black tabular-nums tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-black tabular-nums tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
                     aria-live="polite"
                   >
                     {formatMoney(balance)}
@@ -167,9 +167,9 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                     type="button"
                     aria-label="Add ₹500 demo balance"
                     onClick={onAddFunds}
-                    className="grid size-7 sm:size-8 md:size-9 place-items-center rounded-lg bg-gradient-to-b from-[#ffd666] via-[#faad14] to-[#f59e0b] text-[#241500] font-black shadow-[0_0_10px_rgba(250,173,20,0.7)] transition hover:brightness-110 active:scale-95 ml-1"
+                    className="grid size-5 sm:size-6 md:size-8 lg:size-9 place-items-center rounded bg-gradient-to-b from-[#ffd666] via-[#faad14] to-[#f59e0b] text-[#241500] font-black shadow-[0_0_10px_rgba(250,173,20,0.7)] transition hover:brightness-110 active:scale-95 ml-0.5 sm:ml-1"
                   >
-                    <Plus className="size-4 sm:size-4.5 stroke-[3]" />
+                    <Plus className="size-3 sm:size-3.5 md:size-4.5 stroke-[3]" />
                   </button>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                 aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
                 aria-pressed={soundOn}
                 onClick={onToggleSound}
-                className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+                className="relative flex items-center justify-center h-8 sm:h-11 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
               >
                 <img
                   src={volumeIcon}

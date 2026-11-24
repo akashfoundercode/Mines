@@ -42,10 +42,10 @@ export default function GameBoard({ game }) {
       {/* Top Multiplier Ladder (Bigger line) */}
       <MultiplierBar items={multiplierWindow} />
 
-      {/* 5x5 Tiles Grid Container: Slightly smaller boxes with clean spacing */}
-      <div className="relative w-full flex-1 min-h-0 px-1 sm:px-2 md:px-3 py-1">
+      {/* 5x5 Tiles Grid Container: Fully responsive without cutting or side gaps */}
+      <div className="relative w-full flex-1 min-h-0 px-0.5 sm:px-2 md:px-3 py-0.5 sm:py-1">
         <div
-          className="w-full h-full grid grid-cols-5 grid-rows-5 gap-1.5 sm:gap-2 items-stretch"
+          className="w-full h-full grid grid-cols-5 grid-rows-5 gap-1 sm:gap-1.5 md:gap-2 items-stretch"
           role="group"
           aria-label="Mines grid"
         >

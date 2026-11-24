@@ -10,11 +10,9 @@ const TABS = [
 
 export default function GameMode({ mode, disabled, onChange }) {
   return (
-    <div className="relative">
-      {/* [8] Game Mode Tabs */}
-      <UiBadge num={8} position="top-left" />
+    <div className="relative w-full">
       <div
-        className="grid grid-cols-2 gap-1.5 rounded-xl border-2 border-[#593214] bg-[#241307] p-1 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)]"
+        className="grid grid-cols-2 gap-1 sm:gap-1.5 rounded-lg sm:rounded-xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)]"
         role="tablist"
         aria-label="Game mode"
       >
@@ -28,7 +26,7 @@ export default function GameMode({ mode, disabled, onChange }) {
               aria-selected={active}
               disabled={disabled}
               onClick={() => onChange(id)}
-              className={`relative overflow-hidden flex items-center justify-center gap-1.5 rounded-lg sm:rounded-xl py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm md:text-base font-black transition-all duration-200 disabled:cursor-not-allowed shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${
+              className={`relative overflow-hidden flex items-center justify-center gap-1 sm:gap-1.5 rounded-md sm:rounded-lg py-1 sm:py-2 md:py-2.5 text-[10px] sm:text-xs md:text-base font-black transition-all duration-200 disabled:cursor-not-allowed shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${
                 active
                   ? 'border-2 border-[#ffe066] shadow-[0_0_12px_rgba(255,193,7,0.65)] scale-[1.01]'
                   : 'border border-transparent hover:text-white opacity-85 hover:opacity-100'
@@ -44,7 +42,7 @@ export default function GameMode({ mode, disabled, onChange }) {
                 }`}
               />
               <Icon
-                className={`relative z-10 size-4 sm:size-4.5 ${
+                className={`relative z-10 size-3 sm:size-4 md:size-4.5 ${
                   active ? 'text-[#ffea79] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]' : 'text-[#d8c2aa]'
                 }`}
               />

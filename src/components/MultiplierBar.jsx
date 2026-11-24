@@ -5,7 +5,7 @@ export default function MultiplierBar({ items }) {
   return (
     <div className="relative w-full">
       <div
-        className="flex gap-1 sm:gap-1.5 md:gap-2 rounded-xl sm:rounded-2xl border-2 border-[#593214] bg-[#241307] p-1 sm:p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+        className="flex gap-0.5 sm:gap-1.5 md:gap-2 rounded-lg sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
         role="list"
         aria-label="Multiplier ladder"
       >
@@ -16,7 +16,7 @@ export default function MultiplierBar({ items }) {
               key={step}
               role="listitem"
               aria-current={isCurrent ? 'step' : undefined}
-              className={`relative overflow-hidden flex-1 rounded-lg sm:rounded-xl px-1 sm:px-2 py-1.5 sm:py-2 md:py-2.5 text-center text-xs sm:text-sm md:text-base font-black tabular-nums transition-all duration-300 border ${
+              className={`relative overflow-hidden flex-1 rounded-md sm:rounded-xl px-0.5 sm:px-2 py-0.5 sm:py-2 md:py-2.5 text-center text-[9px] sm:text-xs md:text-base font-black tabular-nums transition-all duration-300 border ${
                 isCurrent
                   ? 'scale-105 border-2 border-[#ffe066] shadow-[0_0_14px_rgba(255,193,7,0.8)]'
                   : isReached
