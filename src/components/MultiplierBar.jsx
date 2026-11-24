@@ -1,38 +1,58 @@
 import { formatMultiplier } from '../utils/gameLogic.js';
-
-const CHIP =
-  'flex-1 rounded-xl px-1 py-2 text-center text-xs sm:text-sm font-extrabold tabular-nums transition-all duration-300';
-
-function chipClass({ isCurrent, isReached, isNext }) {
-  if (isCurrent) {
-    return 'scale-105 border border-[#fff3b0] bg-gradient-to-b from-[#ffe082] via-[#ffc107] to-[#ffa000] text-[#1c1000] font-black shadow-[0_0_16px_rgba(255,193,7,0.75)]';
-  }
-  if (isReached) {
-    return 'border border-[#ffc107]/40 bg-[#162137] text-[#ffc107]';
-  }
-  if (isNext) {
-    return 'border border-[#00d2ff]/40 bg-[#0d1a33] text-white shadow-[0_0_10px_rgba(0,210,255,0.2)]';
-  }
-  return 'border border-[#182c4e] bg-[#0d1a33] text-white/80';
-}
+import topBg from '../assets/icons/top.png';
 
 export default function MultiplierBar({ items }) {
   return (
-    <div
-      className="flex gap-1.5 sm:gap-2 rounded-2xl border border-[#142340] bg-[#060c18] p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.6)]"
-      role="list"
-      aria-label="Multiplier ladder"
-    >
-      {items.map((item) => (
-        <div
-          key={item.step}
-          role="listitem"
-          aria-current={item.isCurrent ? 'step' : undefined}
-          className={`${CHIP} ${chipClass(item)}`}
-        >
-          {formatMultiplier(item.value)}
-        </div>
-      ))}
+    <div className="relative w-full">
+      <div
+        className="flex gap-1 sm:gap-1.5 md:gap-2 rounded-xl sm:rounded-2xl border-2 border-[#593214] bg-[#241307] p-1 sm:p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+        role="list"
+        aria-label="Multiplier ladder"
+      >
+        {items.map((item) => {
+          const { isCurrent, isReached, isNext, step, value } = item;
+          return (
+            <div
+              key={step}
+              role="listitem"
+              aria-current={isCurrent ? 'step' : undefined}
+              className={`relative overflow-hidden flex-1 rounded-lg sm:rounded-xl px-1 sm:px-2 py-1.5 sm:py-2 md:py-2.5 text-center text-xs sm:text-sm md:text-base font-black tabular-nums transition-all duration-300 border ${
+                isCurrent
+                  ? 'scale-105 border-2 border-[#ffe066] shadow-[0_0_14px_rgba(255,193,7,0.8)]'
+                  : isReached
+                    ? 'border-[#ffc107]/60'
+                    : isNext
+                      ? 'border-[#ffbd45]/50'
+                      : 'border-[#542d12]'
+              }`}
+            >
+              {/* top.png background behind multiplier text */}
+              <img
+                src={topBg}
+                alt=""
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 size-full object-fill select-none ${
+                  isCurrent ? 'brightness-125' : isReached ? 'brightness-105' : 'opacity-70'
+                }`}
+              />
+
+              <span
+                className={`relative z-10 font-black tracking-wide drop-shadow-[0_2px_3px_rgba(0,0,0,0.95)] ${
+                  isCurrent
+                    ? 'text-[#ffdb58]'
+                    : isReached
+                      ? 'text-[#ffe396]'
+                      : isNext
+                        ? 'text-white'
+                        : 'text-[#d8c2aa]'
+                }`}
+              >
+                {formatMultiplier(value)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

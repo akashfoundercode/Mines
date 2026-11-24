@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import ExplosionFx, { Cracks } from './ExplosionFx.jsx';
+import boxesImg from '../assets/icons/boxes.png';
 import bombBgImg from '../assets/images/bomb_bg.png';
 import bombImg from '../assets/images/BOMB.png';
 import diamondImg from '../assets/images/diamond.png';
@@ -8,7 +9,7 @@ import diamondImg from '../assets/images/diamond.png';
  * state: 'hidden' | 'gem' | 'exploded' | 'ghostGem' | 'ghostMine'
  */
 const BASE =
-  'relative aspect-square w-full rounded-xl sm:rounded-2xl border outline-none transition-[transform,box-shadow,border-color,background-color] duration-200 focus-visible:ring-2 focus-visible:ring-[#ffc107] select-none';
+  'relative size-full min-h-0 rounded-lg sm:rounded-xl md:rounded-2xl border outline-none transition-[transform,box-shadow,border-color,background-color] duration-200 focus-visible:ring-2 focus-visible:ring-[#ffc107] select-none';
 
 const SKIN = {
   hidden:
@@ -34,9 +35,16 @@ function GameTile({ index, state, interactive, onSelect }) {
   if (isHidden) {
     content = (
       <>
+        {/* boxes.png texture image representing the box */}
+        <img
+          src={boxesImg}
+          alt="Box"
+          className="pointer-events-none absolute inset-0 size-full object-cover select-none"
+        />
+
         {/* Diagonal wood plank grain overlay */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-25"
+          className="pointer-events-none absolute inset-0 opacity-20"
           style={{
             backgroundImage:
               'repeating-linear-gradient(45deg, transparent, transparent 9px, rgba(0,0,0,0.2) 9px, rgba(0,0,0,0.2) 12px)',
@@ -45,15 +53,10 @@ function GameTile({ index, state, interactive, onSelect }) {
         />
 
         {/* 4 Corner Screws / Rivets */}
-        <span className="pointer-events-none absolute top-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
-        <span className="pointer-events-none absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
-        <span className="pointer-events-none absolute bottom-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
-        <span className="pointer-events-none absolute bottom-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
-
-        {/* Carved 3D Golden Question Mark (?) matching reference */}
-        <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-3xl font-black text-[#ffe396] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] drop-shadow-[0_0_8px_rgba(255,200,80,0.35)]">
-          ?
-        </span>
+        <span className="pointer-events-none absolute top-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="pointer-events-none absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="pointer-events-none absolute bottom-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="pointer-events-none absolute bottom-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
       </>
     );
   } else if (state === 'gem') {

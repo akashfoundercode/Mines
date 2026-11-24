@@ -2,15 +2,19 @@ import Background from './components/Background.jsx';
 import Navbar from './components/Navbar.jsx';
 import BettingPanel from './components/BettingPanel.jsx';
 import GameBoard from './components/GameBoard.jsx';
+import RotatePrompt from './components/RotatePrompt.jsx';
 import { useMinesGame } from './hooks/useMinesGame.js';
+import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
 
 export default function App() {
   const game = useMinesGame();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#060b17] font-sans text-white select-none">
+    <div className="relative h-screen h-dvh w-screen overflow-hidden bg-[#060b17] font-sans text-white select-none flex flex-col">
       <Background />
-      <div className="relative z-10 flex min-h-screen flex-col">
+      {/* Mobile Landscape Enforcer Screen */}
+      <RotatePrompt />
+      <div className="relative z-10 flex h-full w-full flex-col overflow-hidden">
         <Navbar
           balance={game.balance}
           soundOn={game.soundOn}
@@ -18,12 +22,30 @@ export default function App() {
           onAddFunds={game.addFunds}
           onResetDemo={game.resetDemo}
         />
-        <main className="mx-auto flex w-full max-w-[1180px] flex-1 items-center justify-center px-3 py-3 sm:px-6 lg:px-8">
-          <div className="grid w-full grid-cols-1 items-start gap-4 lg:grid-cols-[380px_1fr] lg:gap-6 xl:grid-cols-[390px_540px] xl:justify-center">
-            <div className="order-2 lg:order-1">
+
+        {/* Main Stage: Fully responsive with ZERO SCROLLBARS */}
+        <main className="flex-1 flex items-center justify-center p-1 sm:p-2 overflow-hidden min-h-0 w-full">
+          <div
+            className="relative shrink-0 aspect-[1774/887] drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)] select-none"
+            style={{
+              width: 'min(98vw, calc((100dvh - 86px) * 2))',
+              height: 'min(49vw, calc(100dvh - 86px))',
+            }}
+          >
+            {/* The EXACT single 1 image containing both carved wood panels */}
+            <img
+              src={twinWoodPanels}
+              alt="Twin Carved Wood UI Panels"
+              className="pointer-events-none absolute inset-0 size-full object-fill select-none"
+            />
+
+            {/* Left Panel UI Overlay (Adjusted within left wood box) */}
+            <div className="absolute top-[5%] bottom-[5%] left-[6.5%] w-[29.5%] flex flex-col justify-between p-1 sm:p-2 md:p-2.5 overflow-hidden">
               <BettingPanel game={game} />
             </div>
-            <div className="order-1 lg:order-2">
+
+            {/* Right Panel UI Overlay (Adjusted within right wood box) */}
+            <div className="absolute top-[4.5%] bottom-[4.5%] left-[41.5%] w-[52%] flex flex-col justify-between p-1 sm:p-2 md:p-2.5 overflow-hidden">
               <GameBoard game={game} />
             </div>
           </div>

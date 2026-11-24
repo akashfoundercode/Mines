@@ -4,7 +4,6 @@ import MinesSelector from './MinesSelector.jsx';
 import AutoSettings from './AutoSettings.jsx';
 import CashOutButton from './CashOutButton.jsx';
 import GameDetails from './GameDetails.jsx';
-import woodPanelLeft from '../assets/images/wood_panel_left.png';
 
 export default function BettingPanel({ game }) {
   const playing = game.status === 'playing';
@@ -50,12 +49,7 @@ export default function BettingPanel({ game }) {
   return (
     <aside
       aria-label="Betting controls"
-      className="relative flex flex-col gap-3.5 sm:gap-4 rounded-[28px] p-6 sm:p-7 lg:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.8)] overflow-hidden"
-      style={{
-        backgroundImage: `url(${woodPanelLeft})`,
-        backgroundSize: '100% 100%',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="relative flex flex-col justify-between h-full w-full gap-1 sm:gap-1.5 md:gap-2 overflow-hidden"
     >
       <GameMode mode={game.mode} disabled={settingsLocked} onChange={game.setMode} />
 

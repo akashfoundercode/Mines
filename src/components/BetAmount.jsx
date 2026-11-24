@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Info, Minus, Plus } from 'lucide-react';
+import UiBadge from './UiBadge.jsx';
+import topBg from '../assets/icons/top.png';
 
-const QUICK = [10, 50, 100, 500];
+const QUICK = [10, 50, 100, 500, 1000];
 
 const STEP_BTN =
-  'grid size-8 place-items-center rounded-lg border border-[#1c335a] bg-[#0d1a33] text-white transition hover:border-[#2f5596] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40';
-
-const CHIP =
-  'rounded-xl border border-[#182c4e] bg-[#0d1a33] py-2 text-sm font-bold text-white transition hover:border-[#faad14]/60 hover:text-[#faad14] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40';
+  'relative grid size-6 sm:size-7 md:size-8 place-items-center rounded-md sm:rounded-lg border border-[#6b3c18] bg-[#40220d] text-[#ffe396] transition hover:border-[#ffc107] hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 z-10 shrink-0';
 
 export default function BetAmount({ value, disabled, onChange }) {
   const [draft, setDraft] = useState(value.toFixed(2));
@@ -25,15 +24,27 @@ export default function BetAmount({ value, disabled, onChange }) {
   const step = value >= 100 ? 50 : value >= 50 ? 10 : 5;
 
   return (
-    <div>
-      <div className="mb-1.5 flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#8b9bb4]">
-        <span>Bet Amount</span>
-        <Info className="size-3.5 text-[#6c7d99]" aria-hidden="true" />
+    <div className="w-full">
+      {/* Bet Amount Label & Info */}
+      <div className="relative mb-0.5 sm:mb-1 flex items-center gap-1 text-[11px] sm:text-xs md:text-sm font-bold text-[#e6d0ba]">
+        <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Bet Amount (₹)</span>
+        <Info className="size-3 sm:size-3.5 text-[#b09276]" aria-hidden="true" />
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-[#182c4e] bg-[#060c18] p-2 pl-3.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)] focus-within:border-[#ffc53d]/70">
-        <div className="flex items-center gap-1.5">
-          <span className="text-xl font-bold text-[#ffc53d]">₹</span>
+      {/* Bet Amount Input Box featuring top.png behind text */}
+      <div className="relative overflow-hidden flex items-center justify-between rounded-lg sm:rounded-xl border border-[#593214] p-1 sm:p-1.5 md:p-2 pl-2.5 sm:pl-3 shadow-[0_4px_10px_rgba(0,0,0,0.6)] focus-within:border-[#ffc107]">
+        {/* top.png background */}
+        <img
+          src={topBg}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 size-full object-fill select-none"
+        />
+
+        <div className="relative z-10 flex items-center gap-1.5 flex-1 min-w-0 mr-2">
+          <span className="text-sm sm:text-base md:text-lg font-black text-[#ffc107] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] shrink-0">
+            ₹
+          </span>
           <input
             id="bet-amount"
             type="text"
@@ -44,10 +55,12 @@ export default function BetAmount({ value, disabled, onChange }) {
             onChange={(e) => /^\d*\.?\d{0,2}$/.test(e.target.value) && setDraft(e.target.value)}
             onBlur={commit}
             onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-            className="w-28 bg-transparent text-xl font-bold tabular-nums text-white outline-none disabled:opacity-60"
+            className="w-full min-w-0 bg-transparent text-right text-xs sm:text-sm md:text-base lg:text-lg font-black tabular-nums text-white outline-none disabled:opacity-60 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pr-1 sm:pr-2"
           />
         </div>
-        <div className="flex items-center gap-1.5">
+
+        <div className="flex items-center gap-1 z-10 shrink-0">
+          {/* Minus Button */}
           <button
             type="button"
             aria-label="Decrease bet"
@@ -55,8 +68,10 @@ export default function BetAmount({ value, disabled, onChange }) {
             onClick={() => onChange(value - step)}
             className={STEP_BTN}
           >
-            <Minus className="size-4" />
+            <Minus className="size-3 sm:size-3.5 stroke-[3]" />
           </button>
+
+          {/* Plus Button */}
           <button
             type="button"
             aria-label="Increase bet"
@@ -64,23 +79,46 @@ export default function BetAmount({ value, disabled, onChange }) {
             onClick={() => onChange(value + step)}
             className={STEP_BTN}
           >
-            <Plus className="size-4" />
+            <Plus className="size-3 sm:size-3.5 stroke-[3]" />
           </button>
         </div>
       </div>
 
-      <div className="mt-2 grid grid-cols-4 gap-2">
-        {QUICK.map((amount) => (
-          <button
-            key={amount}
-            type="button"
-            disabled={disabled}
-            onClick={() => onChange(amount)}
-            className={`${CHIP} ${value === amount ? 'border-[#ffc53d]/70 text-[#ffc53d]' : ''}`}
-          >
-            ₹{amount}
-          </button>
-        ))}
+      {/* Quick Chips Row featuring top.png behind text */}
+      <div className="relative mt-1 sm:mt-1.5 grid grid-cols-5 gap-0.5 sm:gap-1 md:gap-1.5">
+        {QUICK.map((amount) => {
+          const selected = value === amount;
+          return (
+            <button
+              key={amount}
+              type="button"
+              disabled={disabled}
+              onClick={() => onChange(amount)}
+              className={`relative overflow-hidden rounded-md sm:rounded-lg border py-1 sm:py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm font-bold transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 shadow-[0_2px_6px_rgba(0,0,0,0.5)] ${
+                selected
+                  ? 'border-[#ffe066] shadow-[0_0_8px_rgba(255,193,7,0.5)]'
+                  : 'border-[#593214]'
+              }`}
+            >
+              {/* top.png background */}
+              <img
+                src={topBg}
+                alt=""
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 size-full object-fill select-none ${
+                  selected ? 'brightness-125' : 'opacity-80'
+                }`}
+              />
+              <span
+                className={`relative z-10 font-black drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] ${
+                  selected ? 'text-[#ffdb58]' : 'text-white'
+                }`}
+              >
+                ₹{amount >= 1000 ? `${amount / 1000}k` : amount}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

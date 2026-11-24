@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Crown, Gift, Plus, RotateCcw, Settings, Trophy, Volume2, VolumeX, Wallet } from 'lucide-react';
+import { Crown, Plus, RotateCcw, Trophy, Wallet } from 'lucide-react';
 import { formatMoney } from '../utils/gameLogic.js';
-import bombExplosionImg from '../assets/images/BOMB.png';
-
-const NAV_ITEMS = [
-  { id: 'lobby', label: 'Lobby', icon: Crown },
-  { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
-  { id: 'promotions', label: 'Promotions', icon: Gift },
-];
-
-const ICON_BTN =
-  'grid size-10 sm:size-11 shrink-0 place-items-center rounded-2xl border border-[#1b3158] bg-[#09152a]/90 text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition hover:border-[#2b5192] hover:text-white hover:shadow-[0_0_16px_rgba(22,139,255,0.25)] active:scale-95';
+import LeaderboardModal from './LeaderboardModal.jsx';
+import leftArrowBtn from '../assets/icons/Left Arrow Button.png';
+import leaderboardLogo from '../assets/icons/leaderboard.png';
+import settingIcon from '../assets/icons/setting.png';
+import volumeIcon from '../assets/icons/vollume.png';
+import topBg from '../assets/icons/top.png';
 
 function SettingsMenu({ onResetDemo }) {
   const [open, setOpen] = useState(false);
@@ -30,21 +26,27 @@ function SettingsMenu({ onResetDemo }) {
   }, [open]);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative flex items-center shrink-0">
+      {/* Settings button - background removed, enlarged to match top bar buttons */}
       <button
         type="button"
         aria-label="Settings"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={ICON_BTN}
+        className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
       >
-        <Settings className="size-5" />
+        <img
+          src={settingIcon}
+          alt="Settings"
+          className="h-full w-auto object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.85)] select-none"
+        />
       </button>
+
       {open && (
-        <div className="absolute right-0 top-14 z-50 w-64 animate-fade-in rounded-2xl border border-[#1b3158] bg-[#0b1428]/95 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.7)] backdrop-blur-xl">
-          <p className="text-sm font-bold text-white">Demo mode</p>
-          <p className="mt-1 text-xs leading-relaxed text-[#8d9bb5]">
-            Virtual credits only. Mines and payouts are generated in your browser.
+        <div className="absolute right-0 top-full mt-2 z-50 w-64 animate-fade-in rounded-2xl border-2 border-[#593214] bg-[#1f1107]/95 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-xl">
+          <p className="text-sm font-bold text-[#ffe396]">Demo Mode</p>
+          <p className="mt-1 text-xs leading-relaxed text-[#d8c2aa]">
+            Virtual credits only. Mines and payouts are generated locally.
           </p>
           <button
             type="button"
@@ -52,7 +54,7 @@ function SettingsMenu({ onResetDemo }) {
               onResetDemo();
               setOpen(false);
             }}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#1b3158] bg-[#0e1b34] py-2 text-sm font-semibold text-white transition hover:border-[#ffc53d]/70 hover:text-[#ffc53d]"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#593214] bg-[#2b170a] py-2 text-xs sm:text-sm font-bold text-white transition hover:border-[#ffc107] hover:text-[#ffc107] active:scale-95"
           >
             <RotateCcw className="size-4" /> Reset demo balance
           </button>
@@ -63,82 +65,171 @@ function SettingsMenu({ onResetDemo }) {
 }
 
 export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, onResetDemo }) {
-  const [active, setActive] = useState('lobby');
+  const [activeTab, setActiveTab] = useState('lobby');
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   return (
-    <header className="relative z-20 border-b border-[#142340]/50 bg-[#060c19]/60 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md">
-      <div className="mx-auto flex h-[72px] max-w-[1400px] items-center gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
-        {/* Back button */}
-        <button
-          type="button"
-          aria-label="Back"
-          onClick={() => window.history.length > 1 && window.history.back()}
-          className={ICON_BTN}
-        >
-          <ArrowLeft className="size-5" />
-        </button>
+    <>
+      {/* Top Header: Floating prominently with ALL items matching one uniform large size */}
+      <header className="relative z-20 w-full bg-transparent pt-1 sm:pt-2 px-2 sm:px-4 md:px-6">
+        <div className="mx-auto flex h-[58px] sm:h-[68px] md:h-[78px] max-w-[1400px] items-center justify-between gap-1.5 sm:gap-3 md:gap-4">
+          {/* Left section: [1] Arrow Button (Enlarged) + [2] Leaderboard.png as Logo */}
+          <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+            {/* Back Button (Left Arrow Button.png) - Enlarged to match uniform height */}
+            <div className="relative flex items-center shrink-0">
+              <button
+                type="button"
+                aria-label="Back"
+                onClick={() => window.history.length > 1 && window.history.back()}
+                className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+              >
+                <img
+                  src={leftArrowBtn}
+                  alt="Back"
+                  className="h-full w-auto object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.85)] select-none"
+                />
+              </button>
+            </div>
 
-        {/* Brand logo: Glowing bomb + MINES text */}
-        <div className="flex items-center gap-2 sm:ml-1">
-          <img
-            src={bombExplosionImg}
-            alt="Bomb Logo"
-            className="size-8 sm:size-9 object-contain drop-shadow-[0_0_12px_rgba(255,140,20,0.85)]"
-          />
-          <span className="bg-gradient-to-b from-[#fff3b0] via-[#ffc53d] to-[#d48806] bg-clip-text text-2xl sm:text-3xl font-black tracking-wider text-transparent drop-shadow-[0_2px_12px_rgba(255,197,61,0.55)]">
-            MINES
-          </span>
-        </div>
-
-        {/* Navigation tabs in center */}
-        <nav aria-label="Primary" className="ml-4 hidden items-center gap-2.5 lg:flex xl:ml-8">
-          {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              type="button"
-              aria-current={active === id ? 'page' : undefined}
-              onClick={() => setActive(id)}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition hover:border-[#ffc53d]/60 hover:text-white ${
-                active === id
-                  ? 'border-[#ffc53d]/50 bg-[#12203d] text-white shadow-[0_0_16px_rgba(255,197,61,0.2)]'
-                  : 'border-[#172a4d] bg-[#091428]/80 text-[#a0b0cb]'
-              }`}
-            >
-              <Icon className="size-4 text-[#ffc53d]" /> {label}
-            </button>
-          ))}
-        </nav>
-
-        {/* Right side: Balance with + button, Sound toggle, Settings */}
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-2 rounded-2xl border border-[#1b3158] bg-[#09152a]/90 py-1.5 pl-3 pr-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_4px_12px_rgba(0,0,0,0.4)]">
-            <Wallet className="size-5 text-[#ffc53d]" aria-hidden="true" />
-            <span className="text-sm font-medium text-[#8d9bb5] max-md:hidden">Balance:</span>
-            <span className="text-sm font-extrabold tabular-nums tracking-wide text-white sm:text-base" aria-live="polite">
-              {formatMoney(balance)}
-            </span>
-            <button
-              type="button"
-              aria-label="Add ₹500 demo balance"
-              onClick={onAddFunds}
-              className="grid size-7 sm:size-8 place-items-center rounded-xl bg-gradient-to-b from-[#ffd666] via-[#faad14] to-[#f59e0b] text-[#241500] font-black shadow-[0_0_12px_rgba(250,173,20,0.6)] transition hover:brightness-110 active:scale-95"
-            >
-              <Plus className="size-4 stroke-[3]" />
-            </button>
+            {/* Logo (leaderboard.png) - Uniform height */}
+            <div className="relative flex items-center shrink-0">
+              <img
+                src={leaderboardLogo}
+                alt="Logo"
+                className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[260px] object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] drop-shadow-[0_0_20px_rgba(255,193,7,0.35)] select-none transition-transform hover:scale-105"
+              />
+            </div>
           </div>
 
-          <button
-            type="button"
-            aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
-            aria-pressed={soundOn}
-            onClick={onToggleSound}
-            className={ICON_BTN}
-          >
-            {soundOn ? <Volume2 className="size-5" /> : <VolumeX className="size-5 text-[#8d9bb5]" />}
-          </button>
-          <SettingsMenu onResetDemo={onResetDemo} />
+          {/* Right section: Lobby + Leader Board + Balances + Sound + Settings */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3.5 shrink-0">
+            {/* Lobby Button */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setActiveTab('lobby')}
+                className="relative overflow-hidden flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-6 text-xs sm:text-sm md:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+              >
+                <img
+                  src={topBg}
+                  alt=""
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 size-full object-fill select-none"
+                />
+                <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  <Crown className="size-4 sm:size-5 md:size-6 text-[#ffc107]" />
+                  <span>Lobby</span>
+                </span>
+              </button>
+            </div>
+
+            {/* Leader Board Button */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowLeaderboard(true)}
+                className="relative overflow-hidden flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-6 text-xs sm:text-sm md:text-base font-black transition active:scale-95 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+              >
+                <img
+                  src={topBg}
+                  alt=""
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 size-full object-fill select-none"
+                />
+                <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 text-[#ffe396] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  <Trophy className="size-4 sm:size-5 md:size-6 text-[#ffc107]" />
+                  <span>Leader Board</span>
+                </span>
+              </button>
+            </div>
+
+            {/* Balances Widget */}
+            <div className="relative">
+              <div className="relative overflow-hidden flex items-center gap-2 sm:gap-2.5 rounded-xl sm:rounded-2xl h-12 sm:h-14 md:h-16 lg:h-18 px-3.5 sm:px-4.5 md:px-5 shadow-[0_4px_14px_rgba(0,0,0,0.6)]">
+                <img
+                  src={topBg}
+                  alt=""
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 size-full object-fill select-none"
+                />
+                <div className="relative z-10 flex items-center gap-1.5 sm:gap-2.5">
+                  <Wallet className="size-4 sm:size-5 md:size-6 text-[#ffc107]" aria-hidden="true" />
+                  <span className="text-xs sm:text-sm text-[#e6d0ba] font-bold hidden xl:inline drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+                    Balance:
+                  </span>
+                  <span
+                    className="text-sm sm:text-base md:text-lg font-black tabular-nums tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
+                    aria-live="polite"
+                  >
+                    {formatMoney(balance)}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="Add ₹500 demo balance"
+                    onClick={onAddFunds}
+                    className="grid size-7 sm:size-8 md:size-9 place-items-center rounded-lg bg-gradient-to-b from-[#ffd666] via-[#faad14] to-[#f59e0b] text-[#241500] font-black shadow-[0_0_10px_rgba(250,173,20,0.7)] transition hover:brightness-110 active:scale-95 ml-1"
+                  >
+                    <Plus className="size-4 sm:size-4.5 stroke-[3]" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Sound Toggle using vollume.png without background box */}
+            <div className="relative flex items-center shrink-0">
+              <button
+                type="button"
+                aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
+                aria-pressed={soundOn}
+                onClick={onToggleSound}
+                className="relative flex items-center justify-center h-12 sm:h-14 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+              >
+                <img
+                  src={volumeIcon}
+                  alt={soundOn ? 'Sound On' : 'Sound Muted'}
+                  className={`h-full w-auto object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.85)] select-none transition-all ${
+                    soundOn ? 'brightness-100' : 'brightness-90 opacity-80'
+                  }`}
+                />
+
+                {/* Diagonal Mute Slash Line */}
+                {!soundOn && (
+                  <svg
+                    viewBox="0 0 100 100"
+                    className="pointer-events-none absolute inset-0 size-full z-10 drop-shadow-[0_2px_5px_rgba(0,0,0,0.95)]"
+                    aria-hidden="true"
+                  >
+                    <line
+                      x1="22"
+                      y1="22"
+                      x2="78"
+                      y2="78"
+                      stroke="#000000"
+                      strokeWidth="9"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="22"
+                      y1="22"
+                      x2="78"
+                      y2="78"
+                      stroke="#ff3333"
+                      strokeWidth="5.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+
+            {/* Settings Button */}
+            <SettingsMenu onResetDemo={onResetDemo} />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Leaderboard Popup Modal */}
+      {showLeaderboard && <LeaderboardModal onClose={() => setShowLeaderboard(false)} />}
+    </>
   );
 }
