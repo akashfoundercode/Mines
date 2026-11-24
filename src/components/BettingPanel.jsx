@@ -4,17 +4,13 @@ import MinesSelector from './MinesSelector.jsx';
 import AutoSettings from './AutoSettings.jsx';
 import CashOutButton from './CashOutButton.jsx';
 import GameDetails from './GameDetails.jsx';
+import woodPanelLeft from '../assets/images/wood_panel_left.png';
 
 export default function BettingPanel({ game }) {
   const playing = game.status === 'playing';
   const isAuto = game.mode === 'auto';
   const settingsLocked = playing || game.autoRunning;
 
-  // In the reference image, there is one unified primary button:
-  // When playing with opened tiles: "▶ Cash Out" with current potential win
-  // When playing with 0 tiles opened: "▶ Pick a Tile" (disabled until first tile picked)
-  // When idle: "▶ Bet" with the bet amount
-  // When auto running: "■ Stop Auto" with rounds left
   let actionLabel = 'Bet';
   let actionAmount = game.betAmount;
   let actionDisabled = false;
@@ -54,7 +50,12 @@ export default function BettingPanel({ game }) {
   return (
     <aside
       aria-label="Betting controls"
-      className="flex flex-col gap-4 rounded-3xl border border-[#172a4c] bg-gradient-to-b from-[#0b1428]/95 to-[#070e1c]/95 p-4 sm:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl"
+      className="relative flex flex-col gap-3.5 sm:gap-4 rounded-[28px] p-6 sm:p-7 lg:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.8)] overflow-hidden"
+      style={{
+        backgroundImage: `url(${woodPanelLeft})`,
+        backgroundSize: '100% 100%',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       <GameMode mode={game.mode} disabled={settingsLocked} onChange={game.setMode} />
 

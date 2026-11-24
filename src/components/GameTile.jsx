@@ -8,22 +8,22 @@ import diamondImg from '../assets/images/diamond.png';
  * state: 'hidden' | 'gem' | 'exploded' | 'ghostGem' | 'ghostMine'
  */
 const BASE =
-  'relative aspect-square w-full rounded-2xl sm:rounded-[18px] border outline-none transition-[transform,box-shadow,border-color,background-color] duration-200 focus-visible:ring-2 focus-visible:ring-[#00d2ff]';
+  'relative aspect-square w-full rounded-xl sm:rounded-2xl border outline-none transition-[transform,box-shadow,border-color,background-color] duration-200 focus-visible:ring-2 focus-visible:ring-[#ffc107] select-none';
 
 const SKIN = {
   hidden:
-    'overflow-hidden border-[#1f3764] bg-gradient-to-b from-[#13223f] to-[#0a1324] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_0_#050a14,0_8px_16px_rgba(0,0,0,0.4)]',
-  gem: 'overflow-hidden border-2 border-[#00d2ff] bg-gradient-to-b from-[#093a74] to-[#052144] shadow-[0_0_24px_rgba(0,210,255,0.65),inset_0_0_18px_rgba(0,210,255,0.35)]',
+    'overflow-hidden border-2 border-[#8e5223] bg-gradient-to-br from-[#7d4a22] via-[#5e3415] to-[#3a1d09] shadow-[inset_0_1px_2px_rgba(255,215,140,0.45),0_4px_8px_rgba(0,0,0,0.7)]',
+  gem: 'overflow-hidden border-2 border-[#00d2ff] bg-gradient-to-b from-[#093a74] to-[#052144] shadow-[0_0_24px_rgba(0,210,255,0.8),inset_0_0_18px_rgba(0,210,255,0.45)]',
   exploded:
     'z-20 overflow-visible border-transparent bg-transparent shadow-[0_0_40px_rgba(255,77,79,0.8)]',
   ghostGem:
-    'overflow-hidden border-[#1a2e52] bg-gradient-to-b from-[#111e36] to-[#08101e] shadow-[0_3px_0_#050a14]',
+    'overflow-hidden border-2 border-[#543015] bg-gradient-to-br from-[#4a2b13] to-[#251307] shadow-[0_3px_6px_rgba(0,0,0,0.6)]',
   ghostMine:
     'z-10 overflow-visible border-transparent bg-transparent shadow-[0_3px_0_#050a14]',
 };
 
 const HOVER =
-  'cursor-pointer hover:-translate-y-0.5 hover:border-[#3875d7] hover:from-[#182c50] hover:to-[#0d1a30] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_5px_0_#050a14,0_10px_20px_rgba(0,0,0,0.45)] active:translate-y-1 active:scale-[0.97] active:shadow-[0_1px_0_#050a14]';
+  'cursor-pointer hover:-translate-y-0.5 hover:border-[#ffbd45] hover:shadow-[0_0_16px_rgba(255,189,69,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] active:translate-y-1 active:scale-[0.97] active:shadow-[0_1px_0_#050a14]';
 
 function GameTile({ index, state, interactive, onSelect }) {
   const isHidden = state === 'hidden';
@@ -33,11 +33,28 @@ function GameTile({ index, state, interactive, onSelect }) {
   let content = null;
   if (isHidden) {
     content = (
-      <img
-        src={diamondImg}
-        alt=""
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[48%] w-auto -translate-x-1/2 -translate-y-1/2 object-contain opacity-25 brightness-50 contrast-125 select-none"
-      />
+      <>
+        {/* Diagonal wood plank grain overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-25"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(45deg, transparent, transparent 9px, rgba(0,0,0,0.2) 9px, rgba(0,0,0,0.2) 12px)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* 4 Corner Screws / Rivets */}
+        <span className="pointer-events-none absolute top-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
+        <span className="pointer-events-none absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
+        <span className="pointer-events-none absolute bottom-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
+        <span className="pointer-events-none absolute bottom-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000]" />
+
+        {/* Carved 3D Golden Question Mark (?) matching reference */}
+        <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-3xl font-black text-[#ffe396] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] drop-shadow-[0_0_8px_rgba(255,200,80,0.35)]">
+          ?
+        </span>
+      </>
     );
   } else if (state === 'gem') {
     content = (
@@ -59,7 +76,7 @@ function GameTile({ index, state, interactive, onSelect }) {
         <img
           src={diamondImg}
           alt="Diamond"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 animate-gem-pop object-contain drop-shadow-[0_0_18px_rgba(0,210,255,0.95)] drop-shadow-[0_0_35px_rgba(0,180,255,0.5)] select-none"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 animate-gem-pop object-contain drop-shadow-[0_0_18px_rgba(0,210,255,0.95)] drop-shadow-[0_0_35px_rgba(0,180,255,0.5)]"
         />
       </>
     );
@@ -101,7 +118,7 @@ function GameTile({ index, state, interactive, onSelect }) {
       <img
         src={diamondImg}
         alt="Diamond"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[52%] w-auto -translate-x-1/2 -translate-y-1/2 animate-tile-reveal object-contain opacity-45 saturate-60 select-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[52%] w-auto -translate-x-1/2 -translate-y-1/2 animate-tile-reveal object-contain opacity-45 saturate-60"
         style={ghostDelay}
       />
     );

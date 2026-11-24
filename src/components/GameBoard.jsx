@@ -3,6 +3,7 @@ import GameTile from './GameTile.jsx';
 import GameOverModal from './GameOverModal.jsx';
 import WinModal from './WinModal.jsx';
 import { GRID_SIZE } from '../utils/gameLogic.js';
+import woodPanelRight from '../assets/images/wood_panel_right.png';
 
 const TILES = Array.from({ length: GRID_SIZE }, (_, i) => i);
 
@@ -22,9 +23,14 @@ export default function GameBoard({ game }) {
   return (
     <section
       aria-label="Mines board"
-      className={`relative flex flex-col gap-4 rounded-3xl border border-[#172a4c] bg-gradient-to-b from-[#0b1428]/95 to-[#070e1c]/95 p-4 sm:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl transition-all ${
+      className={`relative flex flex-col gap-3.5 sm:gap-4 rounded-[28px] p-6 sm:p-7 lg:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.8)] overflow-hidden ${
         status === 'lost' ? 'animate-board-shake' : ''
       }`}
+      style={{
+        backgroundImage: `url(${woodPanelRight})`,
+        backgroundSize: '100% 100%',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
       {/* Red blast flash across the board on explosion */}
       {status === 'lost' && (
@@ -43,7 +49,7 @@ export default function GameBoard({ game }) {
 
       {/* 5x5 Tiles Grid */}
       <div
-        className="mx-auto w-full grid grid-cols-5 gap-2 sm:gap-3"
+        className="mx-auto w-full grid grid-cols-5 gap-2 sm:gap-2.5"
         role="group"
         aria-label="Mines grid"
       >
@@ -57,9 +63,6 @@ export default function GameBoard({ game }) {
           />
         ))}
       </div>
-
-      {/* Golden bottom light reflection bar */}
-      <div className="pointer-events-none absolute inset-x-12 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#ffc107] to-transparent shadow-[0_0_14px_rgba(255,193,7,0.8)]" />
 
       {/* Game Over / Win Modals */}
       {showResult && result?.outcome === 'lost' && (
