@@ -10,7 +10,7 @@ const TABS = [
 
 export default function GameMode({ mode, disabled, onChange }) {
   return (
-    <div className="relative w-full">
+    <div className="mobile-land-gamemode relative w-full">
       <div
         className="grid grid-cols-2 gap-1 sm:gap-1.5 rounded-lg sm:rounded-xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)]"
         role="tablist"

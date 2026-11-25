@@ -43,9 +43,9 @@ export default function GameBoard({ game }) {
       <MultiplierBar items={multiplierWindow} />
 
       {/* 5x5 Tiles Grid Container: Fully responsive without cutting or side gaps */}
-      <div className="relative w-full flex-1 min-h-0 px-0.5 sm:px-2 md:px-3 py-0.5 sm:py-1">
+      <div className="mobile-land-grid-wrapper relative w-full flex-1 min-h-0 px-0.5 sm:px-2 md:px-3 py-0.5 sm:py-1">
         <div
-          className="w-full h-full grid grid-cols-5 grid-rows-5 gap-1 sm:gap-1.5 md:gap-2 items-stretch"
+          className="mobile-land-grid w-full h-full grid grid-cols-5 grid-rows-5 gap-1 sm:gap-1.5 md:gap-2 items-stretch"
           role="group"
           aria-label="Mines grid"
         >

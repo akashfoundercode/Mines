@@ -265,10 +265,252 @@ body,
   --nav-height: 86px;
 }
 
-/* Mobile landscape: sleek compact navbar so the game board gets maximum space with zero clipping */
+/* ==========================================================================
+   MOBILE LANDSCAPE RESPONSIVE SYSTEM (Applies strictly when height <= 520px)
+   STRICT RULE: Desktop UI (height > 520px) is NEVER touched.
+   ========================================================================== */
 @media (max-height: 520px) {
   :root {
-    --nav-height: 48px;
+    --nav-height: 38px;
+  }
+
+  /* Header / Navbar */
+  .mobile-land-header {
+    padding-top: 2px !important;
+    padding-bottom: 0px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .mobile-land-nav-row {
+    height: 34px !important;
+    gap: 4px !important;
+  }
+
+  .mobile-land-logo {
+    height: 28px !important;
+    max-width: 105px !important;
+  }
+
+  .mobile-land-nav-btn {
+    height: 28px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+
+  .mobile-land-nav-btn svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .mobile-land-balance-box {
+    height: 28px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+
+  .mobile-land-balance-box svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .mobile-land-balance-plus {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .mobile-land-balance-plus svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .mobile-land-icon-btn {
+    height: 28px !important;
+  }
+
+  /* Main Stage Container */
+  .mobile-land-main {
+    padding: 2px !important;
+  }
+
+  /* Left Panel (Betting Controls) */
+  .mobile-land-panel {
+    gap: 3px !important;
+    padding: 2px !important;
+  }
+
+  /* GameMode (Manual / Auto) */
+  .mobile-land-gamemode button {
+    height: 24px !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+
+  .mobile-land-gamemode svg {
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  /* Bet Amount Box */
+  .mobile-land-bet-label {
+    font-size: 9px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .mobile-land-bet-input-box {
+    height: 26px !important;
+    padding: 1px 4px 1px 6px !important;
+    border-radius: 6px !important;
+  }
+
+  .mobile-land-bet-input-box input {
+    font-size: 11px !important;
+    height: 22px !important;
+    padding-right: 2px !important;
+  }
+
+  .mobile-land-step-btn {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 4px !important;
+  }
+
+  .mobile-land-step-btn svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .mobile-land-quick-chips {
+    margin-top: 2px !important;
+    gap: 2px !important;
+  }
+
+  .mobile-land-quick-chips button {
+    height: 19px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    font-size: 9px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Mines Selector */
+  .mobile-land-mines-label {
+    font-size: 9px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .mobile-land-mines-bar {
+    height: 26px !important;
+    padding: 2px !important;
+    gap: 2px !important;
+    border-radius: 6px !important;
+    grid-template-columns: 1fr 1fr 18px 1.2fr 18px 1fr 1fr !important;
+  }
+
+  .mobile-land-mines-bar button,
+  .mobile-land-mines-bar div {
+    height: 22px !important;
+    font-size: 9px !important;
+    border-radius: 4px !important;
+  }
+
+  .mobile-land-mines-bar svg {
+    width: 9px !important;
+    height: 9px !important;
+  }
+
+  /* Cashout / Bet Action Button */
+  .mobile-land-cashout-btn {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-land-cashout-btn span.cashout-label {
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+
+  .mobile-land-cashout-btn span.cashout-label svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .mobile-land-cashout-btn span.cashout-sub {
+    font-size: 9px !important;
+    margin-top: 0px !important;
+  }
+
+  /* Game Details */
+  .mobile-land-details {
+    padding: 3px !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-land-details-header {
+    padding: 1px 4px !important;
+    margin-bottom: 2px !important;
+    font-size: 9px !important;
+    gap: 3px !important;
+    border-radius: 4px !important;
+  }
+
+  .mobile-land-details-header svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .mobile-land-details-row {
+    padding: 1px 4px !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+    border-radius: 4px !important;
+  }
+
+  .mobile-land-details-row span {
+    font-size: 8.5px !important;
+  }
+
+  .mobile-land-details-row img,
+  .mobile-land-details-row svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  /* Multiplier Bar */
+  .mobile-land-multiplier-box {
+    padding: 2px !important;
+    gap: 2px !important;
+    border-radius: 6px !important;
+  }
+
+  .mobile-land-multiplier-item {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    font-size: 9.5px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Game Board Grid */
+  .mobile-land-grid-wrapper {
+    padding: 2px !important;
+  }
+
+  .mobile-land-grid {
+    gap: 2px !important;
+  }
+
+  .mobile-land-tile-screw {
+    width: 4px !important;
+    height: 4px !important;
   }
 }
 

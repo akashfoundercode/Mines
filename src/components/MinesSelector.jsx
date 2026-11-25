@@ -6,13 +6,13 @@ export default function MinesSelector({ value, disabled, onChange }) {
   return (
     <div className="w-full">
       {/* Mines Count Label & Info */}
-      <div className="relative mb-0.5 sm:mb-1 flex items-center gap-1 text-[10px] sm:text-xs md:text-sm font-bold text-[#e6d0ba]">
+      <div className="mobile-land-mines-label relative mb-0.5 sm:mb-1 flex items-center gap-1 text-[10px] sm:text-xs md:text-sm font-bold text-[#e6d0ba]">
         <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Mines</span>
         <Info className="size-2.5 sm:size-3.5 text-[#b09276]" aria-hidden="true" />
       </div>
 
       {/* Mines Selector Bar with buttons featuring top.png */}
-      <div className="relative grid grid-cols-[1fr_1fr_22px_1.3fr_22px_1fr_1fr] sm:grid-cols-[1fr_1fr_32px_1.4fr_32px_1fr_1fr] items-center gap-0.5 sm:gap-1 rounded-lg sm:rounded-xl border border-[#593214] bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.7)]">
+      <div className="mobile-land-mines-bar relative grid grid-cols-[1fr_1fr_22px_1.3fr_22px_1fr_1fr] sm:grid-cols-[1fr_1fr_32px_1.4fr_32px_1fr_1fr] items-center gap-0.5 sm:gap-1 rounded-lg sm:rounded-xl border border-[#593214] bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.7)]">
         {/* Preset 3 */}
         <button
           type="button"

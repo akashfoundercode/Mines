@@ -51,7 +51,7 @@ export default function App() {
         />
 
         {/* Main Stage: Fully responsive with ZERO SCROLLBARS */}
-        <main className="flex-1 flex items-center justify-center p-0.5 sm:p-2 overflow-hidden min-h-0 w-full">
+        <main className="mobile-land-main flex-1 flex items-center justify-center p-0.5 sm:p-2 overflow-hidden min-h-0 w-full">
           <div
             className="relative shrink-0 aspect-[1774/887] drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)] select-none"
             style={{

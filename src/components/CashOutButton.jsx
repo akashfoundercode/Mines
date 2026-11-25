@@ -17,7 +17,7 @@ export default function CashOutButton({
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className={`group relative w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl py-1.5 sm:py-2.5 md:py-4 px-2 sm:px-4 transition-all duration-150 active:translate-y-0.5 border-2 ${
+        className={`mobile-land-cashout-btn group relative w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl py-1.5 sm:py-2.5 md:py-4 px-2 sm:px-4 transition-all duration-150 active:translate-y-0.5 border-2 ${
           isStop
             ? 'border-[#ff8888] shadow-[0_2px_0_#751515,0_0_15px_rgba(229,57,53,0.5)]'
             : 'border-[#ffe066] shadow-[0_2px_0_#874d00,0_0_20px_rgba(255,197,61,0.55)] enabled:hover:brightness-110'
@@ -48,7 +48,7 @@ export default function CashOutButton({
         )}
 
         {/* Main label with play icon - on top of bet.png */}
-        <span className="relative z-10 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base md:text-lg font-black leading-tight tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+        <span className="cashout-label relative z-10 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base md:text-lg font-black leading-tight tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
           {isStop ? (
             <Square className="size-3 sm:size-4 md:size-5 fill-current text-[#ff5252]" />
           ) : (
@@ -59,7 +59,7 @@ export default function CashOutButton({
 
         {/* Sub amount - on top of bet.png */}
         {amount !== undefined && (
-          <span className="relative z-10 block text-center text-[9px] sm:text-sm md:text-base font-black tabular-nums tracking-wide text-[#ffdb58] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95 mt-0.5">
+          <span className="cashout-sub relative z-10 block text-center text-[9px] sm:text-sm md:text-base font-black tabular-nums tracking-wide text-[#ffdb58] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] opacity-95 mt-0.5">
             {formatMoney(amount)}
           </span>
         )}

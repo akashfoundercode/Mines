@@ -49,7 +49,7 @@ export default function BettingPanel({ game }) {
   return (
     <aside
       aria-label="Betting controls"
-      className="relative flex flex-col justify-between h-full w-full gap-0.5 sm:gap-1.5 md:gap-2 overflow-hidden"
+      className="mobile-land-panel relative flex flex-col justify-between h-full w-full gap-0.5 sm:gap-1.5 md:gap-2 overflow-hidden"
     >
       <GameMode mode={game.mode} disabled={settingsLocked} onChange={game.setMode} />
 

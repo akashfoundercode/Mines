@@ -5,7 +5,7 @@ import topBg from '../assets/icons/top.png';
 
 function Row({ icon, label, value }) {
   return (
-    <div className="relative overflow-hidden flex items-center justify-between py-0.5 sm:py-1 md:py-1.5 px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl my-0.5 sm:my-1 border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+    <div className="mobile-land-details-row relative overflow-hidden flex items-center justify-between py-0.5 sm:py-1 md:py-1.5 px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl my-0.5 sm:my-1 border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
       {/* top.png background */}
       <img
         src={topBg}
@@ -31,9 +31,9 @@ export default function GameDetails({ gemsLeft, mineRisk, opened }) {
   return (
     <section
       aria-label="Game details"
-      className="relative rounded-lg sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307]/90 p-1 sm:p-2 md:p-2.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+      className="mobile-land-details relative rounded-lg sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307]/90 p-1 sm:p-2 md:p-2.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
     >
-      <div className="relative overflow-hidden rounded-md sm:rounded-lg px-1.5 sm:px-2.5 py-0.5 sm:py-1 mb-0.5 sm:mb-1.5 flex items-center gap-1 sm:gap-1.5">
+      <div className="mobile-land-details-header relative overflow-hidden rounded-md sm:rounded-lg px-1.5 sm:px-2.5 py-0.5 sm:py-1 mb-0.5 sm:mb-1.5 flex items-center gap-1 sm:gap-1.5">
         <img
           src={topBg}
           alt=""

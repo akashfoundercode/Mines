@@ -53,10 +53,10 @@ function GameTile({ index, state, interactive, onSelect }) {
         />
 
         {/* 4 Corner Screws / Rivets */}
-        <span className="pointer-events-none absolute top-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
-        <span className="pointer-events-none absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
-        <span className="pointer-events-none absolute bottom-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
-        <span className="pointer-events-none absolute bottom-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="mobile-land-tile-screw pointer-events-none absolute top-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="mobile-land-tile-screw pointer-events-none absolute top-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="mobile-land-tile-screw pointer-events-none absolute bottom-1.5 left-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
+        <span className="mobile-land-tile-screw pointer-events-none absolute bottom-1.5 right-1.5 size-1.5 rounded-full bg-[#dbe0ec] shadow-[inset_0_1px_1px_#fff,0_1px_2px_#000] z-10" />
       </>
     );
   } else if (state === 'gem') {
