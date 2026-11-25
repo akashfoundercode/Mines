@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Smartphone, RotateCw } from 'lucide-react';
+import { Smartphone, RotateCw, Maximize } from 'lucide-react';
+import { requestMobileFullscreen } from '../utils/fullscreen.js';
 import topBg from '../assets/icons/top.png';
 
 export default function RotatePrompt() {
@@ -35,7 +36,8 @@ export default function RotatePrompt() {
       role="dialog"
       aria-modal="true"
       aria-label="Rotate device to landscape"
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-[#040812]/95 backdrop-blur-2xl select-none animate-fade-in"
+      onClick={requestMobileFullscreen}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-[#040812]/95 backdrop-blur-2xl select-none animate-fade-in cursor-pointer"
     >
       {/* Background ambient glow */}
       <div

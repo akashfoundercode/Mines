@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Crown, Plus, RotateCcw, Trophy, Wallet } from 'lucide-react';
+import { Crown, Maximize, Plus, RotateCcw, Trophy, Wallet } from 'lucide-react';
 import { formatMoney } from '../utils/gameLogic.js';
+import { isMobileDevice, toggleMobileFullscreen } from '../utils/fullscreen.js';
 import LeaderboardModal from './LeaderboardModal.jsx';
 import leftArrowBtn from '../assets/icons/Left Arrow Button.png';
 import leaderboardLogo from '../assets/icons/leaderboard.png';
@@ -58,6 +59,18 @@ function SettingsMenu({ onResetDemo }) {
           >
             <RotateCcw className="size-4" /> Reset demo balance
           </button>
+          {isMobileDevice() && (
+            <button
+              type="button"
+              onClick={() => {
+                toggleMobileFullscreen();
+                setOpen(false);
+              }}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[#593214] bg-[#2b170a] py-2 text-xs sm:text-sm font-bold text-[#ffdb58] transition hover:border-[#ffc107] active:scale-95"
+            >
+              <Maximize className="size-4" /> Toggle Fullscreen
+            </button>
+          )}
         </div>
       )}
     </div>

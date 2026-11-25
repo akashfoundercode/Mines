@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Play, Maximize } from 'lucide-react';
+import { isMobileDevice, requestMobileFullscreen } from '../utils/fullscreen.js';
 import diamondImg from '../assets/images/diamond.png';
 import bombImg from '../assets/images/BOMB.png';
 import minesBg from '../assets/images/MINES.png';
@@ -39,6 +41,23 @@ export default function GameLoader({ onLoaded }) {
   const [progress, setProgress] = useState(0);
   const [stepText, setStepText] = useState(LOADING_STEPS[0]);
   const [fadingOut, setFadingOut] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const isMobile = isMobileDevice();
+  const transitionedRef = useRef(false);
+
+  const completeAndEnter = () => {
+    if (transitionedRef.current) return;
+    transitionedRef.current = true;
+
+    if (isMobile) {
+      requestMobileFullscreen();
+    }
+
+    setFadingOut(true);
+    setTimeout(() => {
+      onLoaded?.();
+    }, 500);
+  };
 
   useEffect(() => {
     let loadedCount = 0;
@@ -89,23 +108,42 @@ export default function GameLoader({ onLoaded }) {
 
         if (next >= 100) {
           clearInterval(interval);
-          setTimeout(() => {
-            setFadingOut(true);
+          setIsReady(true);
+
+          if (!isMobile) {
+            // Desktop: Auto-transition smoothly without requiring any gesture
             setTimeout(() => {
-              onLoaded?.();
-            }, 550);
-          }, 350);
+              completeAndEnter();
+            }, 350);
+          } else {
+            // Mobile: Allow a 3.5s auto-fallback just in case, but user tap is prompted
+            setTimeout(() => {
+              completeAndEnter();
+            }, 3500);
+          }
         }
         return next;
       });
     }, 40);
 
     return () => clearInterval(interval);
-  }, [onLoaded]);
+  }, [isMobile]);
 
   return (
     <div
-      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center select-none overflow-hidden bg-[#040812] transition-opacity duration-500 ${
+      role="button"
+      tabIndex={0}
+      onClick={() => {
+        if (isMobile) {
+          completeAndEnter();
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          completeAndEnter();
+        }
+      }}
+      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center select-none overflow-hidden bg-[#040812] transition-opacity duration-500 cursor-pointer ${
         fadingOut ? 'opacity-0 pointer-events-none scale-105' : 'opacity-100'
       }`}
     >
@@ -136,16 +174,16 @@ export default function GameLoader({ onLoaded }) {
       {/* Loader Center Showcase Card */}
       <div className="relative z-10 flex flex-col items-center max-w-md w-full px-6 text-center">
         {/* Game Logo */}
-        <div className="relative mb-6">
+        <div className="relative mb-5 sm:mb-6">
           <img
             src={leaderboardLogo}
             alt="Mines"
-            className="h-20 sm:h-24 w-auto object-contain drop-shadow-[0_0_35px_rgba(255,193,7,0.6)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+            className="h-16 sm:h-24 w-auto object-contain drop-shadow-[0_0_35px_rgba(255,193,7,0.6)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
           />
         </div>
 
         {/* Orbiting / Pulsating Diamond & Bomb Artifacts */}
-        <div className="relative mb-8 flex size-28 items-center justify-center">
+        <div className="relative mb-6 sm:mb-8 flex size-24 sm:size-28 items-center justify-center">
           {/* Cyan/Gold glowing portal halo */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#00d2ff]/30 via-[#ffc107]/25 to-[#ff4d4f]/30 blur-xl animate-pulse [animation-duration:2s]" />
           <div className="absolute inset-2 rounded-full border border-[#ffe066]/40 animate-spin [animation-duration:8s]" />
@@ -154,14 +192,14 @@ export default function GameLoader({ onLoaded }) {
           <img
             src={diamondImg}
             alt="Diamond"
-            className="absolute left-1 top-2 size-16 object-contain drop-shadow-[0_0_20px_rgba(0,210,255,0.95)] animate-bounce [animation-duration:2.2s]"
+            className="absolute left-1 top-2 size-12 sm:size-16 object-contain drop-shadow-[0_0_20px_rgba(0,210,255,0.95)] animate-bounce [animation-duration:2.2s]"
           />
 
           {/* Menacing Bomb */}
           <img
             src={bombImg}
             alt="Bomb"
-            className="absolute right-0 bottom-2 size-14 object-contain drop-shadow-[0_0_18px_rgba(255,60,20,0.95)] animate-pulse [animation-duration:1.8s]"
+            className="absolute right-0 bottom-2 size-11 sm:size-14 object-contain drop-shadow-[0_0_18px_rgba(255,60,20,0.95)] animate-pulse [animation-duration:1.8s]"
           />
         </div>
 
@@ -169,7 +207,7 @@ export default function GameLoader({ onLoaded }) {
         <div className="relative w-full rounded-2xl border-2 border-[#8e5223] bg-[#140b04]/90 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.9),inset_0_2px_8px_rgba(0,0,0,0.85)]">
           {/* Progress fill bar */}
           <div
-            className="relative h-4 sm:h-5 rounded-xl overflow-hidden transition-all duration-150 ease-out"
+            className="relative h-3.5 sm:h-5 rounded-xl overflow-hidden transition-all duration-150 ease-out"
             style={{
               width: `${progress}%`,
               background:
@@ -186,14 +224,32 @@ export default function GameLoader({ onLoaded }) {
         </div>
 
         {/* Numeric Progress Percentage & Step Status Text */}
-        <div className="w-full mt-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#e6d0ba]">
-          <span className="text-[#ffe396] tracking-wide animate-pulse drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+        <div className="w-full mt-2.5 sm:mt-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#e6d0ba]">
+          <span className="text-[#ffe396] tracking-wide animate-pulse drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] truncate max-w-[70%]">
             {stepText}
           </span>
-          <span className="font-mono text-sm sm:text-base text-[#00d2ff] drop-shadow-[0_0_10px_rgba(0,210,255,0.8)]">
+          <span className="font-mono text-xs sm:text-base text-[#00d2ff] drop-shadow-[0_0_10px_rgba(0,210,255,0.8)]">
             {progress}%
           </span>
         </div>
+
+        {/* Mobile-Only Interactive "TAP TO PLAY (FULLSCREEN)" Call To Action */}
+        {isMobile && isReady && (
+          <div className="mt-5 animate-bounce">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                completeAndEnter();
+              }}
+              className="relative inline-flex items-center gap-2 rounded-2xl border-2 border-[#ffd700] bg-gradient-to-r from-[#ffd700] via-[#ff9800] to-[#ffd700] px-6 py-2.5 text-sm sm:text-base font-black text-[#1a0f05] shadow-[0_0_25px_rgba(255,215,0,0.7),inset_0_1px_2px_rgba(255,255,255,0.8)] transition active:scale-95"
+            >
+              <Play className="size-4 fill-current" />
+              <span>TAP TO PLAY (FULLSCREEN)</span>
+              <Maximize className="size-4" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

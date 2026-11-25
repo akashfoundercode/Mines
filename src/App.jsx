@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Background from './components/Background.jsx';
 import Navbar from './components/Navbar.jsx';
 import BettingPanel from './components/BettingPanel.jsx';
@@ -6,11 +6,31 @@ import GameBoard from './components/GameBoard.jsx';
 import RotatePrompt from './components/RotatePrompt.jsx';
 import GameLoader from './components/GameLoader.jsx';
 import { useMinesGame } from './hooks/useMinesGame.js';
+import { isMobileDevice, isFullscreenActive, requestMobileFullscreen } from './utils/fullscreen.js';
 import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
 
 export default function App() {
   const game = useMinesGame();
   const [loading, setLoading] = useState(true);
+
+  // STRICTLY MOBILE ONLY: ensure mobile touch interactions maintain fullscreen
+  useEffect(() => {
+    if (!isMobileDevice()) return;
+
+    const handleMobileTouch = () => {
+      if (!isFullscreenActive()) {
+        requestMobileFullscreen();
+      }
+    };
+
+    window.addEventListener('touchstart', handleMobileTouch, { passive: true });
+    window.addEventListener('click', handleMobileTouch, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', handleMobileTouch);
+      window.removeEventListener('click', handleMobileTouch);
+    };
+  }, []);
 
   return (
     <div className="relative h-screen h-dvh w-screen overflow-hidden bg-[#060b17] font-sans text-white select-none flex flex-col">
