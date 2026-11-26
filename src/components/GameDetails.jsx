@@ -3,11 +3,10 @@ import { GRID_SIZE } from '../utils/gameLogic.js';
 import diamondImg from '../assets/images/diamond.png';
 import topBg from '../assets/icons/top.png';
 
-function Row({ icon, label, value, rowH }) {
+function Row({ icon, label, value }) {
   return (
     <div
-      className="mobile-land-details-row relative overflow-hidden flex items-center justify-between py-0.5 sm:py-1 md:py-1.5 px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl my-0.5 sm:my-1 border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-      style={rowH ? { minHeight: `${rowH}px` } : undefined}
+      className="mobile-land-details-row relative overflow-hidden flex items-center justify-between px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
     >
       {/* top.png background */}
       <img
@@ -30,15 +29,11 @@ function Row({ icon, label, value, rowH }) {
   );
 }
 
-export default function GameDetails({ gemsLeft, mineRisk, opened, radius, padding, rowH, rowGap }) {
+export default function GameDetails({ gemsLeft, mineRisk, opened }) {
   return (
     <section
       aria-label="Game details"
       className="mobile-land-details relative rounded-xl sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307]/90 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)] shrink min-h-0 flex flex-col justify-between"
-      style={{
-        borderRadius: radius !== undefined ? `${radius}px` : undefined,
-        padding: padding !== undefined ? `${padding}px` : undefined,
-      }}
     >
       <div className="mobile-land-details-header relative overflow-hidden rounded-md sm:rounded-lg flex items-center">
         <img
@@ -53,13 +48,9 @@ export default function GameDetails({ gemsLeft, mineRisk, opened, radius, paddin
         </span>
       </div>
 
-      <div
-        className="space-y-0.5 sm:space-y-1 flex-1 flex flex-col justify-around min-h-0"
-        style={rowGap !== undefined ? { gap: `${rowGap}px` } : undefined}
-      >
+      <div className="flex-1 flex flex-col justify-between min-h-0 gap-0.5 sm:gap-1">
         {/* Gems Left */}
         <Row
-          rowH={rowH}
           icon={
             <img
               src={diamondImg}
@@ -73,7 +64,6 @@ export default function GameDetails({ gemsLeft, mineRisk, opened, radius, paddin
 
         {/* Mine Risk */}
         <Row
-          rowH={rowH}
           icon={<Bomb className="size-2.5 sm:size-3.5 md:size-4 text-[#ff9800]" aria-hidden="true" />}
           label="Mine risk"
           value={`${mineRisk.toFixed(2)}%`}
@@ -81,7 +71,6 @@ export default function GameDetails({ gemsLeft, mineRisk, opened, radius, paddin
 
         {/* Opened Tiles */}
         <Row
-          rowH={rowH}
           icon={<LayoutGrid className="size-2.5 sm:size-3.5 md:size-4 text-[#ffc107]" aria-hidden="true" />}
           label="Opened tiles"
           value={`${opened} / ${GRID_SIZE}`}

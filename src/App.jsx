@@ -5,7 +5,6 @@ import BettingPanel from './components/BettingPanel.jsx';
 import GameBoard from './components/GameBoard.jsx';
 import RotatePrompt from './components/RotatePrompt.jsx';
 import GameLoader from './components/GameLoader.jsx';
-import UiCalibrator, { loadSavedCalibration } from './components/UiCalibrator.jsx';
 import { useMinesGame } from './hooks/useMinesGame.js';
 import { isMobileDevice, isFullscreenActive, requestMobileFullscreen } from './utils/fullscreen.js';
 import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
@@ -13,7 +12,6 @@ import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
 export default function App() {
   const game = useMinesGame();
   const [loading, setLoading] = useState(true);
-  const [calibration, setCalibration] = useState(loadSavedCalibration);
 
   // STRICTLY MOBILE ONLY: ensure mobile touch interactions maintain fullscreen
   useEffect(() => {
@@ -50,8 +48,8 @@ export default function App() {
           onToggleSound={game.toggleSound}
           onAddFunds={game.addFunds}
           onResetDemo={game.resetDemo}
-          navHeight={calibration.navHeight}
-          logoHeight={calibration.logoHeight}
+          navHeight={87}
+          logoHeight={66}
         />
 
         {/* Main Stage: Fully responsive with ZERO SCROLLBARS */}
@@ -59,11 +57,10 @@ export default function App() {
           <div
             className="relative shrink-0 aspect-[1774/887] drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)] select-none"
             style={{
-              width: 'min(98vw, calc((100dvh - var(--nav-height, 86px)) * 2))',
-              height: 'min(49vw, calc(100dvh - var(--nav-height, 86px)))',
+              width: 'min(98vw, calc((100dvh - var(--nav-height, 87px)) * 2))',
+              height: 'min(49vw, calc(100dvh - var(--nav-height, 87px)))',
               containerType: 'size',
-              transform: calibration.stageScale !== 1 ? `scale(${calibration.stageScale})` : undefined,
-              '--nav-height': `${calibration.navHeight}px`,
+              transform: 'scale(0.95)',
             }}
           >
             {/* The EXACT single 1 image containing both carved wood panels */}
@@ -73,58 +70,38 @@ export default function App() {
               className="pointer-events-none absolute inset-0 size-full object-fill select-none"
             />
 
-            {/* Left Panel UI Overlay (Live adjustable via sliders) */}
+            {/* Left Panel UI Overlay (Calibrated & Fully Responsive) */}
             <div
               className="absolute flex flex-col justify-between p-0.5 sm:p-1 md:p-1.5 overflow-hidden"
               style={{
-                top: `${calibration.leftTop}%`,
-                bottom: `${calibration.leftBottom}%`,
-                left: `${calibration.leftLeft}%`,
-                width: `${calibration.leftWidth}%`,
-                borderRadius: `${calibration.leftRadius}px`,
-                transform: calibration.leftScale !== 1 ? `scale(${calibration.leftScale})` : undefined,
+                top: '6.7%',
+                bottom: '5.1%',
+                left: '7.3%',
+                width: '28.5%',
+                borderRadius: '9px',
+                transform: 'scale(0.98)',
                 transformOrigin: 'top left',
               }}
             >
-              <BettingPanel
-                game={game}
-                gap={calibration.leftGap}
-                radius={calibration.leftRadius}
-                innerWidth={calibration.innerWidth}
-                gameModeH={calibration.gameModeH}
-                betInputH={calibration.betInputH}
-                quickChipsH={calibration.quickChipsH}
-                minesBarH={calibration.minesBarH}
-                cashoutH={calibration.cashoutH}
-                detailsP={calibration.detailsP}
-                detailsRowH={calibration.detailsRowH}
-                detailsRowGap={calibration.detailsRowGap}
-              />
+              <BettingPanel game={game} />
             </div>
 
-            {/* Right Panel UI Overlay (Live adjustable via sliders) */}
+            {/* Right Panel UI Overlay (Calibrated & Fully Responsive) */}
             <div
               className="absolute flex flex-col justify-between p-0.5 sm:p-1 md:p-1.5 overflow-hidden"
               style={{
-                top: `${calibration.rightTop}%`,
-                bottom: `${calibration.rightBottom}%`,
-                left: `${calibration.rightLeft}%`,
-                width: `${calibration.rightWidth}%`,
-                borderRadius: `${calibration.rightRadius}px`,
+                top: '7.7%',
+                bottom: '5.7%',
+                left: '42%',
+                width: '51.8%',
+                borderRadius: '16px',
               }}
             >
-              <GameBoard game={game} radius={calibration.rightRadius} />
+              <GameBoard game={game} radius={16} />
             </div>
           </div>
         </main>
       </div>
-
-      {/* Manual UI Calibration Controller with live sliders */}
-      <UiCalibrator
-        values={calibration}
-        onChange={setCalibration}
-        onReset={setCalibration}
-      />
     </div>
   );
 }
