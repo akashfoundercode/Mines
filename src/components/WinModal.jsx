@@ -21,7 +21,7 @@ const PARTICLES = Array.from({ length: 32 }, (_, i) => {
 
 function WinParticles() {
   return (
-    <div className="pointer-events-none absolute left-1/2 top-24 size-0" aria-hidden="true">
+    <div className="pointer-events-none absolute left-1/2 top-14 sm:top-24 size-0" aria-hidden="true">
       {PARTICLES.map((p, i) => (
         <span
           key={i}
@@ -46,29 +46,32 @@ function WinParticles() {
 export default function WinModal({ result, onNewGame, onDismiss }) {
   return (
     <div
-      className="absolute inset-0 z-30 grid animate-fade-in place-items-center rounded-[inherit] bg-ink/70 p-4 backdrop-blur-sm"
+      className="absolute inset-0 z-30 flex items-center justify-center rounded-[inherit] bg-ink/75 p-1 sm:p-2 md:p-4 backdrop-blur-sm overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-labelledby="win-title"
     >
-      <div className="relative w-full max-w-sm animate-modal-in rounded-3xl border border-gold/70 bg-gradient-to-b from-[#16294a]/95 to-[#0b1426]/95 p-6 text-center shadow-[0_0_60px_rgba(255,189,69,.4),0_0_90px_rgba(0,210,255,.2),inset_0_1px_0_rgba(255,255,255,.12)]">
+      <div className="modal-result-card relative w-full max-w-sm animate-modal-in rounded-3xl border border-gold/70 bg-gradient-to-b from-[#16294a]/95 to-[#0b1426]/95 text-center shadow-[0_0_60px_rgba(255,189,69,.4),0_0_90px_rgba(0,210,255,.2),inset_0_1px_0_rgba(255,255,255,.12)] flex flex-col items-center justify-between overflow-y-auto scrollbar-none">
         <WinParticles />
+
         <img
           src={diamondImg}
           alt="Winner Diamond"
-          className="mx-auto size-24 object-contain drop-shadow-[0_0_25px_rgba(0,210,255,0.95)] drop-shadow-[0_0_50px_rgba(0,180,255,0.6)] animate-bounce"
+          className="modal-result-bomb-img mx-auto object-contain drop-shadow-[0_0_25px_rgba(0,210,255,0.95)] drop-shadow-[0_0_50px_rgba(0,180,255,0.6)] animate-bounce shrink-0"
         />
+
         <h2
           id="win-title"
-          className="mt-1 bg-gradient-to-b from-[#fff0b8] via-gold to-ember bg-clip-text text-5xl font-black tracking-wider text-transparent"
+          className="modal-result-title bg-gradient-to-b from-[#fff0b8] via-gold to-ember bg-clip-text font-black tracking-wider text-transparent shrink-0"
         >
           WIN
         </h2>
-        <p className="mt-1 text-4xl font-extrabold tabular-nums text-neon drop-shadow-[0_0_14px_rgba(0,217,255,.6)]">
+
+        <p className="modal-result-payout font-extrabold tabular-nums text-neon drop-shadow-[0_0_14px_rgba(0,217,255,.6)] shrink-0">
           {formatMoney(result.payout)}
         </p>
 
-        <div className="mt-5 grid grid-cols-3 gap-2">
+        <div className="modal-result-stats-grid grid w-full grid-cols-3 shrink-0">
           <ResultStat label="Multiplier" value={formatMultiplier(result.multiplier)} valueClass="text-gold" />
           <ResultStat label="Profit" value={`+${formatMoney(result.profit)}`} valueClass="text-emerald-400" />
           <ResultStat label="Gems" value={result.gems} valueClass="text-neon" />
@@ -78,16 +81,17 @@ export default function WinModal({ result, onNewGame, onDismiss }) {
           type="button"
           autoFocus
           onClick={onNewGame}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-[#ffd36e] to-[#f28c1c] py-3 text-lg font-extrabold text-[#2a1600] shadow-[0_5px_0_#b8620a,0_10px_24px_rgba(255,160,40,.3)] transition active:translate-y-1 active:shadow-[0_1px_0_#b8620a]"
+          className="modal-result-action-btn flex w-full items-center justify-center font-extrabold text-[#2a1600] rounded-2xl bg-gradient-to-b from-[#ffd36e] to-[#f28c1c] shadow-[0_4px_0_#b8620a,0_8px_20px_rgba(255,160,40,.3)] transition active:translate-y-0.5 active:shadow-[0_1px_0_#b8620a] shrink-0"
         >
-          <RotateCcw className="size-5" /> New Game
+          <RotateCcw className="size-4 sm:size-5" /> New Game
         </button>
+
         <button
           type="button"
           onClick={onDismiss}
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition hover:text-white"
+          className="modal-result-dismiss-btn inline-flex items-center font-medium text-muted transition hover:text-white shrink-0"
         >
-          <Eye className="size-4" /> View board
+          <Eye className="size-3.5 sm:size-4" /> View board
         </button>
       </div>
     </div>

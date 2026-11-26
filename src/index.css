@@ -725,6 +725,85 @@ body,
   height: clamp(8px, 1.8cqh, 15px) !important;
 }
 
+/* ==========================================================================
+   GAME RESULT MODALS (GameOverModal & WinModal) - Fluid Responsive Sizing
+   ========================================================================== */
+.modal-result-card {
+  padding: clamp(6px, 2.6cqh, 22px) clamp(10px, 3.2cqw, 24px) !important;
+  border-radius: clamp(12px, 3.0cqh, 24px) !important;
+  max-height: 96% !important;
+  width: min(92%, 400px) !important;
+}
+
+.modal-result-bomb-box {
+  width: clamp(34px, 12.0cqh, 84px) !important;
+  height: clamp(34px, 12.0cqh, 84px) !important;
+}
+
+.modal-result-bomb-img {
+  width: clamp(28px, 10.0cqh, 72px) !important;
+  height: clamp(28px, 10.0cqh, 72px) !important;
+}
+
+.modal-result-title {
+  font-size: clamp(15px, 5.0cqh, 34px) !important;
+  margin-top: clamp(2px, 0.8cqh, 8px) !important;
+  line-height: 1.1 !important;
+}
+
+.modal-result-subtitle {
+  font-size: clamp(10px, 2.6cqh, 17px) !important;
+  margin-top: clamp(1px, 0.3cqh, 4px) !important;
+}
+
+.modal-result-payout {
+  font-size: clamp(14px, 4.8cqh, 32px) !important;
+  margin-top: clamp(1px, 0.3cqh, 4px) !important;
+}
+
+.modal-result-stats-grid {
+  margin-top: clamp(3px, 1.8cqh, 16px) !important;
+  gap: clamp(2px, 1.0cqw, 8px) !important;
+}
+
+.modal-result-stat {
+  padding: clamp(2px, 0.8cqh, 8px) clamp(3px, 1.0cqw, 10px) !important;
+  border-radius: clamp(5px, 1.4cqh, 12px) !important;
+}
+
+.modal-stat-label {
+  font-size: clamp(7.5px, 1.7cqh, 11px) !important;
+}
+
+.modal-stat-value {
+  font-size: clamp(9.5px, 2.4cqh, 16px) !important;
+}
+
+.modal-result-action-btn {
+  margin-top: clamp(4px, 1.8cqh, 16px) !important;
+  padding-top: clamp(4px, 1.4cqh, 12px) !important;
+  padding-bottom: clamp(4px, 1.4cqh, 12px) !important;
+  font-size: clamp(10.5px, 2.6cqh, 17px) !important;
+  border-radius: clamp(7px, 2.0cqh, 16px) !important;
+  gap: clamp(3px, 0.8cqh, 8px) !important;
+}
+
+.modal-result-action-btn svg {
+  width: clamp(12px, 2.8cqh, 18px) !important;
+  height: clamp(12px, 2.8cqh, 18px) !important;
+}
+
+.modal-result-dismiss-btn {
+  margin-top: clamp(2px, 0.8cqh, 8px) !important;
+  font-size: clamp(8.5px, 1.9cqh, 13px) !important;
+  gap: clamp(2px, 0.5cqh, 6px) !important;
+}
+
+.modal-result-dismiss-btn svg {
+  width: clamp(10px, 2.0cqh, 15px) !important;
+  height: clamp(10px, 2.0cqh, 15px) !important;
+}
+
 /* Multiplier Bar */
 .mobile-land-multiplier-box {
   padding: clamp(2px, 0.6cqh, 6px) !important;
