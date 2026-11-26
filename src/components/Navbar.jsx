@@ -77,7 +77,7 @@ function SettingsMenu({ onResetDemo }) {
   );
 }
 
-export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, onResetDemo }) {
+export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, onResetDemo, navHeight, logoHeight }) {
   const [activeTab, setActiveTab] = useState('lobby');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
@@ -85,7 +85,10 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
     <>
       {/* Top Header: Floating prominently with ALL items matching one uniform large size */}
       <header className="mobile-land-header relative z-20 w-full bg-transparent pt-0.5 sm:pt-2 px-1.5 sm:px-4 md:px-6">
-        <div className="mobile-land-nav-row mx-auto flex h-9 sm:h-12 md:h-[72px] lg:h-[78px] max-w-[1400px] items-center justify-between gap-1 sm:gap-2.5 md:gap-4">
+        <div
+          className="mobile-land-nav-row mx-auto flex h-9 sm:h-12 md:h-[72px] lg:h-[78px] max-w-[1400px] items-center justify-between gap-1 sm:gap-2.5 md:gap-4"
+          style={navHeight ? { height: `${navHeight}px` } : undefined}
+        >
           {/* Left section: [1] Arrow Button (Enlarged) + [2] Leaderboard.png as Logo */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Back Button (Left Arrow Button.png) - Enlarged to match uniform height */}
@@ -95,6 +98,7 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                 aria-label="Back"
                 onClick={() => window.history.length > 1 && window.history.back()}
                 className="mobile-land-icon-btn relative flex items-center justify-center h-8 sm:h-11 md:h-16 lg:h-18 w-auto shrink-0 transition hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-[#ffc107]"
+                style={logoHeight ? { height: `${logoHeight}px` } : undefined}
               >
                 <img
                   src={leftArrowBtn}
@@ -110,6 +114,7 @@ export default function Navbar({ balance, soundOn, onToggleSound, onAddFunds, on
                 src={leaderboardLogo}
                 alt="Logo"
                 className="mobile-land-logo h-8 sm:h-11 md:h-16 lg:h-18 w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] drop-shadow-[0_0_20px_rgba(255,193,7,0.35)] select-none transition-transform hover:scale-105"
+                style={logoHeight ? { height: `${logoHeight}px` } : undefined}
               />
             </div>
           </div>

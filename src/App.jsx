@@ -5,6 +5,7 @@ import BettingPanel from './components/BettingPanel.jsx';
 import GameBoard from './components/GameBoard.jsx';
 import RotatePrompt from './components/RotatePrompt.jsx';
 import GameLoader from './components/GameLoader.jsx';
+import UiCalibrator, { loadSavedCalibration } from './components/UiCalibrator.jsx';
 import { useMinesGame } from './hooks/useMinesGame.js';
 import { isMobileDevice, isFullscreenActive, requestMobileFullscreen } from './utils/fullscreen.js';
 import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
@@ -12,6 +13,7 @@ import twinWoodPanels from './assets/images/Twin Carved Wood UI Panels.png';
 export default function App() {
   const game = useMinesGame();
   const [loading, setLoading] = useState(true);
+  const [calibration, setCalibration] = useState(loadSavedCalibration);
 
   // STRICTLY MOBILE ONLY: ensure mobile touch interactions maintain fullscreen
   useEffect(() => {
@@ -48,6 +50,8 @@ export default function App() {
           onToggleSound={game.toggleSound}
           onAddFunds={game.addFunds}
           onResetDemo={game.resetDemo}
+          navHeight={calibration.navHeight}
+          logoHeight={calibration.logoHeight}
         />
 
         {/* Main Stage: Fully responsive with ZERO SCROLLBARS */}
@@ -57,6 +61,9 @@ export default function App() {
             style={{
               width: 'min(98vw, calc((100dvh - var(--nav-height, 86px)) * 2))',
               height: 'min(49vw, calc(100dvh - var(--nav-height, 86px)))',
+              containerType: 'size',
+              transform: calibration.stageScale !== 1 ? `scale(${calibration.stageScale})` : undefined,
+              '--nav-height': `${calibration.navHeight}px`,
             }}
           >
             {/* The EXACT single 1 image containing both carved wood panels */}
@@ -66,18 +73,58 @@ export default function App() {
               className="pointer-events-none absolute inset-0 size-full object-fill select-none"
             />
 
-            {/* Left Panel UI Overlay (Adjusted within left wood box) */}
-            <div className="absolute top-[5%] bottom-[5%] left-[6.5%] w-[29.5%] flex flex-col justify-between p-0.5 sm:p-1.5 md:p-2.5 overflow-hidden">
-              <BettingPanel game={game} />
+            {/* Left Panel UI Overlay (Live adjustable via sliders) */}
+            <div
+              className="absolute flex flex-col justify-between p-0.5 sm:p-1 md:p-1.5 overflow-hidden"
+              style={{
+                top: `${calibration.leftTop}%`,
+                bottom: `${calibration.leftBottom}%`,
+                left: `${calibration.leftLeft}%`,
+                width: `${calibration.leftWidth}%`,
+                borderRadius: `${calibration.leftRadius}px`,
+                transform: calibration.leftScale !== 1 ? `scale(${calibration.leftScale})` : undefined,
+                transformOrigin: 'top left',
+              }}
+            >
+              <BettingPanel
+                game={game}
+                gap={calibration.leftGap}
+                radius={calibration.leftRadius}
+                innerWidth={calibration.innerWidth}
+                gameModeH={calibration.gameModeH}
+                betInputH={calibration.betInputH}
+                quickChipsH={calibration.quickChipsH}
+                minesBarH={calibration.minesBarH}
+                cashoutH={calibration.cashoutH}
+                detailsP={calibration.detailsP}
+                detailsRowH={calibration.detailsRowH}
+                detailsRowGap={calibration.detailsRowGap}
+              />
             </div>
 
-            {/* Right Panel UI Overlay (Adjusted within right wood box) */}
-            <div className="absolute top-[4.5%] bottom-[4.5%] left-[41.5%] w-[52%] flex flex-col justify-between p-0.5 sm:p-1.5 md:p-2.5 overflow-hidden">
-              <GameBoard game={game} />
+            {/* Right Panel UI Overlay (Live adjustable via sliders) */}
+            <div
+              className="absolute flex flex-col justify-between p-0.5 sm:p-1 md:p-1.5 overflow-hidden"
+              style={{
+                top: `${calibration.rightTop}%`,
+                bottom: `${calibration.rightBottom}%`,
+                left: `${calibration.rightLeft}%`,
+                width: `${calibration.rightWidth}%`,
+                borderRadius: `${calibration.rightRadius}px`,
+              }}
+            >
+              <GameBoard game={game} radius={calibration.rightRadius} />
             </div>
           </div>
         </main>
       </div>
+
+      {/* Manual UI Calibration Controller with live sliders */}
+      <UiCalibrator
+        values={calibration}
+        onChange={setCalibration}
+        onReset={setCalibration}
+      />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import { formatMultiplier } from '../utils/gameLogic.js';
 import topBg from '../assets/icons/top.png';
 
-export default function MultiplierBar({ items }) {
+export default function MultiplierBar({ items, radius }) {
   return (
     <div className="relative w-full">
       <div
-        className="mobile-land-multiplier-box flex gap-0.5 sm:gap-1.5 md:gap-2 rounded-lg sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+        className="mobile-land-multiplier-box flex gap-0.5 sm:gap-1.5 md:gap-2 rounded-xl sm:rounded-2xl md:rounded-3xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+        style={radius !== undefined ? { borderRadius: `${radius}px` } : undefined}
         role="list"
         aria-label="Multiplier ladder"
       >

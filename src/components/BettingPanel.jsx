@@ -5,7 +5,20 @@ import AutoSettings from './AutoSettings.jsx';
 import CashOutButton from './CashOutButton.jsx';
 import GameDetails from './GameDetails.jsx';
 
-export default function BettingPanel({ game }) {
+export default function BettingPanel({
+  game,
+  gap,
+  radius,
+  innerWidth,
+  gameModeH,
+  betInputH,
+  quickChipsH,
+  minesBarH,
+  cashoutH,
+  detailsP,
+  detailsRowH,
+  detailsRowGap,
+}) {
   const playing = game.status === 'playing';
   const isAuto = game.mode === 'auto';
   const settingsLocked = playing || game.autoRunning;
@@ -49,9 +62,21 @@ export default function BettingPanel({ game }) {
   return (
     <aside
       aria-label="Betting controls"
-      className="mobile-land-panel relative flex flex-col justify-between h-full w-full gap-0.5 sm:gap-1.5 md:gap-2 overflow-hidden"
+      className="mobile-land-panel relative flex flex-col justify-between h-full w-full min-h-0 overflow-hidden"
+      style={{
+        gap: gap !== undefined ? `${gap}px` : undefined,
+        borderRadius: radius !== undefined ? `${radius}px` : undefined,
+        width: innerWidth !== undefined ? `${innerWidth}%` : '100%',
+        margin: '0 auto',
+      }}
     >
-      <GameMode mode={game.mode} disabled={settingsLocked} onChange={game.setMode} />
+      <GameMode
+        mode={game.mode}
+        disabled={settingsLocked}
+        onChange={game.setMode}
+        radius={radius}
+        height={gameModeH}
+      />
 
       <BetAmount
         value={game.betAmount}
@@ -59,12 +84,15 @@ export default function BettingPanel({ game }) {
         onChange={game.setBet}
         onMin={game.setBetMin}
         onMax={game.setBetMax}
+        inputH={betInputH}
+        chipsH={quickChipsH}
       />
 
       <MinesSelector
         value={game.minesCount}
         disabled={settingsLocked}
         onChange={game.setMinesCount}
+        barH={minesBarH}
       />
 
       {isAuto && (
@@ -85,12 +113,17 @@ export default function BettingPanel({ game }) {
         disabled={actionDisabled}
         isStop={actionIsStop}
         onClick={actionClick}
+        height={cashoutH}
       />
 
       <GameDetails
         gemsLeft={game.gemsLeft}
         mineRisk={game.mineRisk}
         opened={game.openedCount}
+        radius={radius}
+        padding={detailsP}
+        rowH={detailsRowH}
+        rowGap={detailsRowGap}
       />
     </aside>
   );

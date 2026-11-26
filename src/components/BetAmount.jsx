@@ -6,9 +6,9 @@ import topBg from '../assets/icons/top.png';
 const QUICK = [10, 50, 100, 500, 1000];
 
 const STEP_BTN =
-  'mobile-land-step-btn relative grid size-5 sm:size-7 md:size-8 place-items-center rounded-md sm:rounded-lg border border-[#6b3c18] bg-[#40220d] text-[#ffe396] transition hover:border-[#ffc107] hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 z-10 shrink-0';
+  'mobile-land-step-btn relative grid size-4.5 sm:size-6 md:size-6.5 place-items-center rounded-sm sm:rounded-md border border-[#6b3c18] bg-[#40220d] text-[#ffe396] transition hover:border-[#ffc107] hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 z-10 shrink-0';
 
-export default function BetAmount({ value, disabled, onChange }) {
+export default function BetAmount({ value, disabled, onChange, inputH, chipsH }) {
   const [draft, setDraft] = useState(value.toFixed(2));
 
   useEffect(() => {
@@ -32,7 +32,10 @@ export default function BetAmount({ value, disabled, onChange }) {
       </div>
 
       {/* Bet Amount Input Box featuring top.png behind text */}
-      <div className="mobile-land-bet-input-box relative overflow-hidden flex items-center justify-between rounded-lg sm:rounded-xl border border-[#593214] p-0.5 sm:p-1.5 md:p-2 pl-2 sm:pl-3 shadow-[0_4px_10px_rgba(0,0,0,0.6)] focus-within:border-[#ffc107]">
+      <div
+        className="mobile-land-bet-input-box relative overflow-hidden flex items-center justify-between rounded-lg sm:rounded-xl border border-[#593214] p-0.5 sm:p-1.5 md:p-2 pl-2 sm:pl-3 shadow-[0_4px_10px_rgba(0,0,0,0.6)] focus-within:border-[#ffc107]"
+        style={inputH ? { height: `${inputH}px` } : undefined}
+      >
         {/* top.png background */}
         <img
           src={topBg}
@@ -41,8 +44,8 @@ export default function BetAmount({ value, disabled, onChange }) {
           className="pointer-events-none absolute inset-0 size-full object-fill select-none"
         />
 
-        <div className="relative z-10 flex items-center gap-1 sm:gap-1.5 flex-1 min-w-0 mr-1.5 sm:mr-2">
-          <span className="text-xs sm:text-base md:text-lg font-black text-[#ffc107] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] shrink-0">
+        <div className="relative z-10 flex items-center gap-0.5 sm:gap-1 flex-1 min-w-0 ml-3 sm:ml-5">
+          <span className="text-xs sm:text-base md:text-lg font-black text-[#ffc107] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] shrink-0 select-none">
             ₹
           </span>
           <input
@@ -55,11 +58,11 @@ export default function BetAmount({ value, disabled, onChange }) {
             onChange={(e) => /^\d*\.?\d{0,2}$/.test(e.target.value) && setDraft(e.target.value)}
             onBlur={commit}
             onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-            className="w-full min-w-0 bg-transparent text-right text-xs sm:text-sm md:text-base lg:text-lg font-black tabular-nums text-white outline-none disabled:opacity-60 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pr-1 sm:pr-2"
+            className="w-full min-w-0 bg-transparent text-left text-xs sm:text-sm md:text-base lg:text-lg font-black tabular-nums text-white outline-none disabled:opacity-60 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] pl-0.5"
           />
         </div>
 
-        <div className="flex items-center gap-0.5 sm:gap-1 z-10 shrink-0">
+        <div className="flex items-center gap-0.5 sm:gap-1 z-10 shrink-0 mr-1.5 sm:mr-3">
           {/* Minus Button */}
           <button
             type="button"
@@ -68,7 +71,7 @@ export default function BetAmount({ value, disabled, onChange }) {
             onClick={() => onChange(value - step)}
             className={STEP_BTN}
           >
-            <Minus className="size-2.5 sm:size-3.5 stroke-[3]" />
+            <Minus className="size-2 sm:size-3 stroke-[2.5]" />
           </button>
 
           {/* Plus Button */}
@@ -79,7 +82,7 @@ export default function BetAmount({ value, disabled, onChange }) {
             onClick={() => onChange(value + step)}
             className={STEP_BTN}
           >
-            <Plus className="size-2.5 sm:size-3.5 stroke-[3]" />
+            <Plus className="size-2 sm:size-3 stroke-[2.5]" />
           </button>
         </div>
       </div>
@@ -94,6 +97,7 @@ export default function BetAmount({ value, disabled, onChange }) {
               type="button"
               disabled={disabled}
               onClick={() => onChange(amount)}
+              style={chipsH ? { height: `${chipsH}px` } : undefined}
               className={`relative overflow-hidden rounded-md sm:rounded-lg border py-0.5 sm:py-1.5 md:py-2 text-[9px] sm:text-xs md:text-sm font-bold transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 shadow-[0_2px_6px_rgba(0,0,0,0.5)] ${
                 selected
                   ? 'border-[#ffe066] shadow-[0_0_8px_rgba(255,193,7,0.5)]'

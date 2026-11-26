@@ -17,7 +17,7 @@ function getTileState({ index, status, mines, revealed, explodedTile }) {
   return mines.includes(index) ? 'ghostMine' : 'ghostGem';
 }
 
-export default function GameBoard({ game }) {
+export default function GameBoard({ game, radius }) {
   const { status, mines, revealed, explodedTile, multiplierWindow, result, showResult } = game;
 
   return (
@@ -26,6 +26,7 @@ export default function GameBoard({ game }) {
       className={`relative flex flex-col justify-between h-full w-full gap-1 sm:gap-1.5 ${
         status === 'lost' ? 'animate-board-shake' : ''
       }`}
+      style={radius !== undefined ? { borderRadius: `${radius}px` } : undefined}
     >
       {/* Red blast flash across the board on explosion */}
       {status === 'lost' && (
@@ -40,7 +41,7 @@ export default function GameBoard({ game }) {
       )}
 
       {/* Top Multiplier Ladder (Bigger line) */}
-      <MultiplierBar items={multiplierWindow} />
+      <MultiplierBar items={multiplierWindow} radius={radius} />
 
       {/* 5x5 Tiles Grid Container: Fully responsive without cutting or side gaps */}
       <div className="mobile-land-grid-wrapper relative w-full flex-1 min-h-0 px-0.5 sm:px-2 md:px-3 py-0.5 sm:py-1">

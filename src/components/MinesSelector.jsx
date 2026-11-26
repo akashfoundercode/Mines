@@ -2,7 +2,9 @@ import { Info, Minus, Plus } from 'lucide-react';
 import { MAX_MINES, MIN_MINES } from '../utils/gameLogic.js';
 import topBg from '../assets/icons/top.png';
 
-export default function MinesSelector({ value, disabled, onChange }) {
+export default function MinesSelector({ value, disabled, onChange, barH }) {
+  const btnStyle = barH ? { height: `${Math.round(barH * 0.78)}px` } : undefined;
+
   return (
     <div className="w-full">
       {/* Mines Count Label & Info */}
@@ -12,12 +14,16 @@ export default function MinesSelector({ value, disabled, onChange }) {
       </div>
 
       {/* Mines Selector Bar with buttons featuring top.png */}
-      <div className="mobile-land-mines-bar relative grid grid-cols-[1fr_1fr_22px_1.3fr_22px_1fr_1fr] sm:grid-cols-[1fr_1fr_32px_1.4fr_32px_1fr_1fr] items-center gap-0.5 sm:gap-1 rounded-lg sm:rounded-xl border border-[#593214] bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.7)]">
+      <div
+        className="mobile-land-mines-bar relative grid grid-cols-[1fr_1fr_22px_1.3fr_22px_1fr_1fr] sm:grid-cols-[1fr_1fr_32px_1.4fr_32px_1fr_1fr] items-center gap-0.5 sm:gap-1 rounded-lg sm:rounded-xl border border-[#593214] bg-[#241307] p-0.5 sm:p-1.5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.7)]"
+        style={barH ? { height: `${barH}px` } : undefined}
+      >
         {/* Preset 3 */}
         <button
           type="button"
           disabled={disabled}
           onClick={() => onChange(3)}
+          style={btnStyle}
           className={`relative overflow-hidden h-6 sm:h-8 md:h-9 rounded-md sm:rounded-lg border text-[10px] sm:text-sm md:text-base font-bold transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 ${
             value === 3 ? 'border-[#ffe066] shadow-[0_0_8px_rgba(255,193,7,0.5)]' : 'border-[#593214]'
           }`}

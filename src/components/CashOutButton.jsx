@@ -10,6 +10,7 @@ export default function CashOutButton({
   disabled = false,
   isStop = false,
   onClick,
+  height,
 }) {
   return (
     <div className="relative w-full">
@@ -17,6 +18,7 @@ export default function CashOutButton({
         type="button"
         disabled={disabled}
         onClick={onClick}
+        style={height ? { minHeight: `${height}px`, paddingTop: `${Math.max(4, Math.round(height * 0.12))}px`, paddingBottom: `${Math.max(4, Math.round(height * 0.12))}px` } : undefined}
         className={`mobile-land-cashout-btn group relative w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl py-1.5 sm:py-2.5 md:py-4 px-2 sm:px-4 transition-all duration-150 active:translate-y-0.5 border-2 ${
           isStop
             ? 'border-[#ff8888] shadow-[0_2px_0_#751515,0_0_15px_rgba(229,57,53,0.5)]'

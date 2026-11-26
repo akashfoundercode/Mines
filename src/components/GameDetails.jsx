@@ -3,9 +3,12 @@ import { GRID_SIZE } from '../utils/gameLogic.js';
 import diamondImg from '../assets/images/diamond.png';
 import topBg from '../assets/icons/top.png';
 
-function Row({ icon, label, value }) {
+function Row({ icon, label, value, rowH }) {
   return (
-    <div className="mobile-land-details-row relative overflow-hidden flex items-center justify-between py-0.5 sm:py-1 md:py-1.5 px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl my-0.5 sm:my-1 border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+    <div
+      className="mobile-land-details-row relative overflow-hidden flex items-center justify-between py-0.5 sm:py-1 md:py-1.5 px-1.5 sm:px-2.5 md:px-3 rounded sm:rounded-xl my-0.5 sm:my-1 border border-[#593214]/60 shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+      style={rowH ? { minHeight: `${rowH}px` } : undefined}
+    >
       {/* top.png background */}
       <img
         src={topBg}
@@ -27,13 +30,17 @@ function Row({ icon, label, value }) {
   );
 }
 
-export default function GameDetails({ gemsLeft, mineRisk, opened }) {
+export default function GameDetails({ gemsLeft, mineRisk, opened, radius, padding, rowH, rowGap }) {
   return (
     <section
       aria-label="Game details"
-      className="mobile-land-details relative rounded-lg sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307]/90 p-1 sm:p-2 md:p-2.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)]"
+      className="mobile-land-details relative rounded-xl sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307]/90 shadow-[inset_0_2px_8px_rgba(0,0,0,0.7)] shrink min-h-0 flex flex-col justify-between"
+      style={{
+        borderRadius: radius !== undefined ? `${radius}px` : undefined,
+        padding: padding !== undefined ? `${padding}px` : undefined,
+      }}
     >
-      <div className="mobile-land-details-header relative overflow-hidden rounded-md sm:rounded-lg px-1.5 sm:px-2.5 py-0.5 sm:py-1 mb-0.5 sm:mb-1.5 flex items-center gap-1 sm:gap-1.5">
+      <div className="mobile-land-details-header relative overflow-hidden rounded-md sm:rounded-lg flex items-center">
         <img
           src={topBg}
           alt=""
@@ -41,14 +48,18 @@ export default function GameDetails({ gemsLeft, mineRisk, opened }) {
           className="pointer-events-none absolute inset-0 size-full object-fill select-none brightness-110"
         />
         <BarChart2 className="relative z-10 size-2.5 sm:size-3.5 md:size-4 text-[#ffc107]" aria-hidden="true" />
-        <span className="relative z-10 text-[10px] sm:text-xs md:text-base font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] tracking-wide">
+        <span className="relative z-10 font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] tracking-wide">
           Game Details
         </span>
       </div>
 
-      <div className="space-y-0.5 sm:space-y-1">
+      <div
+        className="space-y-0.5 sm:space-y-1 flex-1 flex flex-col justify-around min-h-0"
+        style={rowGap !== undefined ? { gap: `${rowGap}px` } : undefined}
+      >
         {/* Gems Left */}
         <Row
+          rowH={rowH}
           icon={
             <img
               src={diamondImg}
@@ -62,6 +73,7 @@ export default function GameDetails({ gemsLeft, mineRisk, opened }) {
 
         {/* Mine Risk */}
         <Row
+          rowH={rowH}
           icon={<Bomb className="size-2.5 sm:size-3.5 md:size-4 text-[#ff9800]" aria-hidden="true" />}
           label="Mine risk"
           value={`${mineRisk.toFixed(2)}%`}
@@ -69,6 +81,7 @@ export default function GameDetails({ gemsLeft, mineRisk, opened }) {
 
         {/* Opened Tiles */}
         <Row
+          rowH={rowH}
           icon={<LayoutGrid className="size-2.5 sm:size-3.5 md:size-4 text-[#ffc107]" aria-hidden="true" />}
           label="Opened tiles"
           value={`${opened} / ${GRID_SIZE}`}

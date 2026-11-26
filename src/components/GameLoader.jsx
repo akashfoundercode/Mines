@@ -13,8 +13,10 @@ import leaderboardLogo from '../assets/icons/leaderboard.png';
 import leftArrowBtn from '../assets/icons/Left Arrow Button.png';
 import settingIcon from '../assets/icons/setting.png';
 import volumeIcon from '../assets/icons/vollume.png';
+import loaderBg from '../assets/icons/loaderbg.png';
 
 const ASSETS = [
+  loaderBg,
   minesBg,
   twinWoodPanels,
   diamondImg,
@@ -37,6 +39,47 @@ const LOADING_STEPS = [
   'Ready to strike gold!',
 ];
 
+// Helper to calculate SVG arc path for circular segments
+function describeArc(cx, cy, r, startAngleDeg, endAngleDeg) {
+  const startRad = (startAngleDeg * Math.PI) / 180;
+  const endRad = (endAngleDeg * Math.PI) / 180;
+  const x1 = cx + r * Math.cos(startRad);
+  const y1 = cy + r * Math.sin(startRad);
+  const x2 = cx + r * Math.cos(endRad);
+  const y2 = cy + r * Math.sin(endRad);
+  const largeArcFlag = endAngleDeg - startAngleDeg <= 180 ? 0 : 1;
+  return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+}
+
+// EXACT CALIBRATED COORDINATES:
+const RING_CX = 828;
+const RING_CY = 399;
+const RING_R = 182;
+const RING_SPAN = 270;
+const RING_START = 135;
+const TOTAL_RING_SEGMENTS = 20;
+const STROKE_WIDTH = 18;
+
+const BAR_X = 567;
+const BAR_Y = 737;
+const BAR_W = 523;
+const BAR_H = 39;
+const BAR_RX = BAR_H / 2;
+
+// Precompute calibrated ring segments with clean visible separation gap between thick segments
+const SEG_STEP = RING_SPAN / TOTAL_RING_SEGMENTS;
+const SEG_LEN = 5.8; // Calibrated arc length for 18px stroke to create a distinct clean gap
+const SEG_GAP = (SEG_STEP - SEG_LEN) / 2;
+
+const RING_SEGMENTS = Array.from({ length: TOTAL_RING_SEGMENTS }, (_, i) => {
+  const s = RING_START + i * SEG_STEP + SEG_GAP;
+  const e = s + SEG_LEN;
+  return {
+    index: i,
+    path: describeArc(RING_CX, RING_CY, RING_R, s, e),
+  };
+});
+
 export default function GameLoader({ onLoaded }) {
   const [progress, setProgress] = useState(0);
   const [stepText, setStepText] = useState(LOADING_STEPS[0]);
@@ -44,6 +87,15 @@ export default function GameLoader({ onLoaded }) {
   const [isReady, setIsReady] = useState(false);
   const isMobile = isMobileDevice();
   const transitionedRef = useRef(false);
+
+  // Clear any temporary calibration data from localStorage
+  useEffect(() => {
+    try {
+      localStorage.removeItem('mines_loader_calib_config');
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const completeAndEnter = () => {
     if (transitionedRef.current) return;
@@ -114,7 +166,7 @@ export default function GameLoader({ onLoaded }) {
             // Desktop: Auto-transition smoothly without requiring any gesture
             setTimeout(() => {
               completeAndEnter();
-            }, 350);
+            }, 400);
           } else {
             // Mobile: Allow a 3.5s auto-fallback just in case, but user tap is prompted
             setTimeout(() => {
@@ -128,6 +180,12 @@ export default function GameLoader({ onLoaded }) {
 
     return () => clearInterval(interval);
   }, [isMobile]);
+
+  // How many segments should be lit up right now
+  const litSegmentsCount = Math.floor((progress / 100) * TOTAL_RING_SEGMENTS);
+
+  // Dynamic fill width matching progress
+  const currentFillWidth = Math.max(BAR_RX * 2, (progress / 100) * BAR_W);
 
   return (
     <div
@@ -143,114 +201,218 @@ export default function GameLoader({ onLoaded }) {
           completeAndEnter();
         }
       }}
-      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center select-none overflow-hidden bg-[#040812] transition-opacity duration-500 cursor-pointer ${
+      className={`fixed inset-0 z-[200] flex items-center justify-center select-none overflow-hidden bg-[#040812] transition-opacity duration-500 cursor-pointer ${
         fadingOut ? 'opacity-0 pointer-events-none scale-105' : 'opacity-100'
       }`}
     >
-      {/* Background Cave Artwork with dark vignette */}
+      {/* 1. Background Image: Clean Artwork */}
       <img
-        src={minesBg}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 size-full object-cover opacity-35 filter blur-[2px]"
-      />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse at 50% 50%, rgba(6, 11, 23, 0.7) 0%, rgba(2, 5, 12, 0.95) 100%)',
-        }}
-        aria-hidden="true"
+        src={loaderBg}
+        alt="Loading Mines..."
+        className="pointer-events-none absolute inset-0 size-full object-cover object-center select-none"
       />
 
-      {/* Floating Animated Sparks / Embers */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <span className="absolute top-[20%] left-[15%] size-1.5 rounded-full bg-[#00d2ff] blur-[1px] animate-ping [animation-duration:3s]" />
-        <span className="absolute top-[65%] left-[80%] size-2 rounded-full bg-[#ffc107] blur-[1px] animate-ping [animation-duration:2.5s]" />
-        <span className="absolute top-[35%] right-[20%] size-1.5 rounded-full bg-[#ff4d4f] blur-[1px] animate-ping [animation-duration:3.5s]" />
-        <span className="absolute bottom-[25%] left-[30%] size-2 rounded-full bg-[#ffd700] blur-[1px] animate-ping [animation-duration:2.2s]" />
-      </div>
+      {/* 2. Interactive SVG Overlay aligned 1:1 with loaderbg.png (1671 x 941) */}
+      <svg
+        viewBox="0 0 1671 941"
+        preserveAspectRatio="xMidYMid slice"
+        className="pointer-events-none absolute inset-0 size-full z-10"
+        aria-hidden="true"
+      >
+        <defs>
+          {/* Gradient for Active Ring Segments */}
+          <linearGradient id="ringGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fff8b5" />
+            <stop offset="35%" stopColor="#ffea3d" />
+            <stop offset="75%" stopColor="#ffb300" />
+            <stop offset="100%" stopColor="#ff8f00" />
+          </linearGradient>
 
-      {/* Loader Center Showcase Card */}
-      <div className="relative z-10 flex flex-col items-center max-w-md w-full px-6 text-center">
-        {/* Game Logo */}
-        <div className="relative mb-5 sm:mb-6">
-          <img
-            src={leaderboardLogo}
-            alt="Mines"
-            className="h-16 sm:h-24 w-auto object-contain drop-shadow-[0_0_35px_rgba(255,193,7,0.6)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
-          />
-        </div>
+          {/* Gradient for Bottom Yellow Loading Bar */}
+          <linearGradient id="barGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#ff8000" />
+            <stop offset="25%" stopColor="#ffb300" />
+            <stop offset="65%" stopColor="#ffee55" />
+            <stop offset="100%" stopColor="#ffffff" />
+          </linearGradient>
 
-        {/* Orbiting / Pulsating Diamond & Bomb Artifacts */}
-        <div className="relative mb-6 sm:mb-8 flex size-24 sm:size-28 items-center justify-center">
-          {/* Cyan/Gold glowing portal halo */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#00d2ff]/30 via-[#ffc107]/25 to-[#ff4d4f]/30 blur-xl animate-pulse [animation-duration:2s]" />
-          <div className="absolute inset-2 rounded-full border border-[#ffe066]/40 animate-spin [animation-duration:8s]" />
-
-          {/* Glowing Diamond */}
-          <img
-            src={diamondImg}
-            alt="Diamond"
-            className="absolute left-1 top-2 size-12 sm:size-16 object-contain drop-shadow-[0_0_20px_rgba(0,210,255,0.95)] animate-bounce [animation-duration:2.2s]"
-          />
-
-          {/* Menacing Bomb */}
-          <img
-            src={bombImg}
-            alt="Bomb"
-            className="absolute right-0 bottom-2 size-11 sm:size-14 object-contain drop-shadow-[0_0_18px_rgba(255,60,20,0.95)] animate-pulse [animation-duration:1.8s]"
-          />
-        </div>
-
-        {/* Progress Bar Container */}
-        <div className="relative w-full rounded-2xl border-2 border-[#8e5223] bg-[#140b04]/90 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.9),inset_0_2px_8px_rgba(0,0,0,0.85)]">
-          {/* Progress fill bar */}
-          <div
-            className="relative h-3.5 sm:h-5 rounded-xl overflow-hidden transition-all duration-150 ease-out"
-            style={{
-              width: `${progress}%`,
-              background:
-                'linear-gradient(90deg, #ff9800 0%, #ffc107 40%, #00d2ff 85%, #00f0ff 100%)',
-              boxShadow: '0 0 20px rgba(0, 210, 255, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6)',
-            }}
+          {/* Diagonal Striped Pattern for Loading Bar */}
+          <pattern
+            id="barStripes"
+            width="32"
+            height="32"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
           >
-            {/* Animated shine line inside progress */}
-            <span
-              className="absolute inset-y-0 left-0 w-1/3 animate-shine bg-gradient-to-r from-transparent via-white/70 to-transparent"
-              aria-hidden="true"
+            <rect width="16" height="32" fill="rgba(255,255,255,0.22)" />
+            <rect x="16" width="16" height="32" fill="transparent" />
+          </pattern>
+
+          {/* Clip path for the bottom bar fill */}
+          <clipPath id="barClip">
+            <rect
+              x={BAR_X}
+              y={BAR_Y}
+              width={currentFillWidth}
+              height={BAR_H}
+              rx={BAR_RX}
+              ry={BAR_RX}
             />
-          </div>
-        </div>
+          </clipPath>
+        </defs>
 
-        {/* Numeric Progress Percentage & Step Status Text */}
-        <div className="w-full mt-2.5 sm:mt-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#e6d0ba]">
-          <span className="text-[#ffe396] tracking-wide animate-pulse drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] truncate max-w-[70%]">
-            {stepText}
-          </span>
-          <span className="font-mono text-xs sm:text-base text-[#00d2ff] drop-shadow-[0_0_10px_rgba(0,210,255,0.8)]">
+        {/* ========================================================
+            A. CIRCULAR RING LIGHT (Clean crisp light segments, zero shadow)
+            ======================================================== */}
+        <g id="circular-ring-light">
+          {RING_SEGMENTS.map(({ index, path }) => {
+            const isLit = index < litSegmentsCount;
+
+            if (isLit) {
+              return (
+                <g key={index}>
+                  {/* Crisp vibrant yellow-gold light segment */}
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke="url(#ringGoldGrad)"
+                    strokeWidth={STROKE_WIDTH}
+                    strokeLinecap="round"
+                  />
+                  {/* Clean white-hot inner core */}
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth={Math.max(2, STROKE_WIDTH * 0.32)}
+                    strokeLinecap="round"
+                    opacity="0.9"
+                  />
+                </g>
+              );
+            }
+
+            // Inactive (unlit) segments: zero shadow
+            return (
+              <path
+                key={index}
+                d={path}
+                fill="none"
+                stroke="rgba(255, 215, 100, 0.08)"
+                strokeWidth={Math.max(2, STROKE_WIDTH * 0.8)}
+                strokeLinecap="round"
+              />
+            );
+          })}
+        </g>
+
+        {/* ========================================================
+            B. BOTTOM LOADING BAR (Inside the calibrated wooden slot box)
+            ======================================================== */}
+        <g id="bottom-loading-bar">
+          {/* Subtle dark track background inside the box slot */}
+          <rect
+            x={BAR_X}
+            y={BAR_Y}
+            width={BAR_W}
+            height={BAR_H}
+            rx={BAR_RX}
+            ry={BAR_RX}
+            fill="rgba(12, 6, 2, 0.82)"
+            stroke="rgba(255, 193, 7, 0.35)"
+            strokeWidth="1.5"
+          />
+
+          {/* Yellow Progress Fill with Glow */}
+          <g clipPath="url(#barClip)">
+            {/* Base glowing gradient fill */}
+            <rect
+              x={BAR_X}
+              y={BAR_Y}
+              width={BAR_W}
+              height={BAR_H}
+              fill="url(#barGoldGrad)"
+            />
+
+            {/* Candy-striped animated overlay */}
+            <rect
+              x={BAR_X}
+              y={BAR_Y}
+              width={BAR_W}
+              height={BAR_H}
+              fill="url(#barStripes)"
+              opacity="0.85"
+            />
+
+            {/* Top glossy reflection line */}
+            <rect
+              x={BAR_X + 6}
+              y={BAR_Y + 2}
+              width={BAR_W - 12}
+              height="6"
+              rx="3"
+              fill="rgba(255, 255, 255, 0.6)"
+            />
+          </g>
+
+          {/* Leading edge bright glowing head */}
+          {progress > 2 && progress < 100 && (
+            <circle
+              cx={BAR_X + currentFillWidth - 6}
+              cy={BAR_Y + BAR_H / 2}
+              r="12"
+              fill="#ffffff"
+              opacity="0.9"
+            />
+          )}
+
+          {/* Percentage text INSIDE the bottom loader box */}
+          <text
+            x={BAR_X + BAR_W / 2}
+            y={BAR_Y + BAR_H * 0.68}
+            textAnchor="middle"
+            fill="#150802"
+            fontSize={Math.round(BAR_H * 0.48)}
+            fontWeight="950"
+            letterSpacing="1"
+            filter="drop-shadow(0 1px 1px rgba(255,255,255,0.75))"
+          >
             {progress}%
-          </span>
-        </div>
+          </text>
 
-        {/* Mobile-Only Interactive "TAP TO PLAY (FULLSCREEN)" Call To Action */}
-        {isMobile && isReady && (
-          <div className="mt-5 animate-bounce">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                completeAndEnter();
-              }}
-              className="relative inline-flex items-center gap-2 rounded-2xl border-2 border-[#ffd700] bg-gradient-to-r from-[#ffd700] via-[#ff9800] to-[#ffd700] px-6 py-2.5 text-sm sm:text-base font-black text-[#1a0f05] shadow-[0_0_25px_rgba(255,215,0,0.7),inset_0_1px_2px_rgba(255,255,255,0.8)] transition active:scale-95"
-            >
-              <Play className="size-4 fill-current" />
-              <span>TAP TO PLAY (FULLSCREEN)</span>
-              <Maximize className="size-4" />
-            </button>
-          </div>
-        )}
-      </div>
+          {/* Status Text positioned BELOW the loader bar */}
+          <text
+            x={BAR_X + BAR_W / 2}
+            y={BAR_Y + BAR_H + 52}
+            textAnchor="middle"
+            fill="#ffdb58"
+            fontSize="16"
+            fontWeight="900"
+            letterSpacing="1.2"
+            filter="drop-shadow(0 2px 4px rgba(0,0,0,0.95))"
+          >
+            {stepText}
+          </text>
+        </g>
+      </svg>
+
+      {/* 3. Mobile "TAP TO PLAY (FULLSCREEN)" Call To Action */}
+      {isMobile && isReady && (
+        <div className="absolute z-30 bottom-[4%] animate-bounce">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              completeAndEnter();
+            }}
+            className="relative inline-flex items-center gap-2 rounded-2xl border-2 border-[#ffd700] bg-gradient-to-r from-[#ffd700] via-[#ff9800] to-[#ffd700] px-6 py-2.5 text-sm sm:text-base font-black text-[#1a0f05] shadow-[0_0_30px_rgba(255,215,0,0.85),inset_0_1px_2px_rgba(255,255,255,0.8)] transition active:scale-95"
+          >
+            <Play className="size-4 fill-current" />
+            <span>TAP TO PLAY (FULLSCREEN)</span>
+            <Maximize className="size-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

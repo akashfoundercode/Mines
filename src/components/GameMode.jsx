@@ -8,11 +8,12 @@ const TABS = [
   { id: 'auto', label: 'Auto', icon: Bot },
 ];
 
-export default function GameMode({ mode, disabled, onChange }) {
+export default function GameMode({ mode, disabled, onChange, radius, height }) {
   return (
     <div className="mobile-land-gamemode relative w-full">
       <div
-        className="grid grid-cols-2 gap-1 sm:gap-1.5 rounded-lg sm:rounded-xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)]"
+        className="grid grid-cols-2 gap-1 sm:gap-1.5 rounded-xl sm:rounded-2xl border border-[#593214] sm:border-2 bg-[#241307] p-0.5 sm:p-1 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)]"
+        style={radius !== undefined ? { borderRadius: `${radius}px` } : undefined}
         role="tablist"
         aria-label="Game mode"
       >
@@ -26,6 +27,7 @@ export default function GameMode({ mode, disabled, onChange }) {
               aria-selected={active}
               disabled={disabled}
               onClick={() => onChange(id)}
+              style={height ? { height: `${height}px` } : undefined}
               className={`relative overflow-hidden flex items-center justify-center gap-1 sm:gap-1.5 rounded-md sm:rounded-lg py-1 sm:py-2 md:py-2.5 text-[10px] sm:text-xs md:text-base font-black transition-all duration-200 disabled:cursor-not-allowed shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${
                 active
                   ? 'border-2 border-[#ffe066] shadow-[0_0_12px_rgba(255,193,7,0.65)] scale-[1.01]'

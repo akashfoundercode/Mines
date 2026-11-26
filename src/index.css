@@ -38,218 +38,422 @@
   --animate-phone-rotate: phone-rotate 2.4s ease-in-out infinite;
 
   @keyframes phone-rotate {
-    0%, 15% {
+
+    0%,
+    15% {
       transform: rotate(0deg) scale(1);
     }
-    45%, 70% {
+
+    45%,
+    70% {
       transform: rotate(-90deg) scale(1.08);
     }
+
     100% {
       transform: rotate(0deg) scale(1);
     }
   }
 
   @keyframes gem-pop {
-    0% { transform: scale(0.15) rotate(-14deg); opacity: 0; }
-    55% { transform: scale(1.28) rotate(5deg); opacity: 1; }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
+    0% {
+      transform: scale(0.15) rotate(-14deg);
+      opacity: 0;
+    }
+
+    55% {
+      transform: scale(1.28) rotate(5deg);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
   }
+
   @keyframes gem-burst {
-    0% { transform: scale(0.2); opacity: 0.95; }
-    100% { transform: scale(2.4); opacity: 0; }
+    0% {
+      transform: scale(0.2);
+      opacity: 0.95;
+    }
+
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
   }
+
   @keyframes tile-reveal {
-    0% { transform: perspective(500px) rotateX(-65deg) scale(0.9); opacity: 0; }
-    100% { transform: perspective(500px) rotateX(0) scale(1); opacity: 1; }
+    0% {
+      transform: perspective(500px) rotateX(-65deg) scale(0.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: perspective(500px) rotateX(0) scale(1);
+      opacity: 1;
+    }
   }
+
   @keyframes shake {
-    10%, 90% { transform: translate3d(-3px, 0, 0); }
-    20%, 80% { transform: translate3d(6px, 2px, 0); }
-    30%, 50%, 70% { transform: translate3d(-10px, -4px, 0); }
-    40%, 60% { transform: translate3d(10px, 4px, 0); }
+
+    10%,
+    90% {
+      transform: translate3d(-3px, 0, 0);
+    }
+
+    20%,
+    80% {
+      transform: translate3d(6px, 2px, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-10px, -4px, 0);
+    }
+
+    40%,
+    60% {
+      transform: translate3d(10px, 4px, 0);
+    }
   }
+
   @keyframes board-shake {
-    0% { transform: translate3d(0, 0, 0) scale(1); }
-    8% { transform: translate3d(-15px, 11px, 0) scale(1.03); }
-    18% { transform: translate3d(15px, -13px, 0) scale(0.98); }
-    28% { transform: translate3d(-13px, -9px, 0) scale(1.02); }
-    38% { transform: translate3d(11px, 9px, 0); }
-    48% { transform: translate3d(-9px, -6px, 0); }
-    60% { transform: translate3d(7px, 5px, 0); }
-    72% { transform: translate3d(-5px, -3px, 0); }
-    85% { transform: translate3d(3px, 2px, 0); }
-    100% { transform: translate3d(0, 0, 0) scale(1); }
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    8% {
+      transform: translate3d(-15px, 11px, 0) scale(1.03);
+    }
+
+    18% {
+      transform: translate3d(15px, -13px, 0) scale(0.98);
+    }
+
+    28% {
+      transform: translate3d(-13px, -9px, 0) scale(1.02);
+    }
+
+    38% {
+      transform: translate3d(11px, 9px, 0);
+    }
+
+    48% {
+      transform: translate3d(-9px, -6px, 0);
+    }
+
+    60% {
+      transform: translate3d(7px, 5px, 0);
+    }
+
+    72% {
+      transform: translate3d(-5px, -3px, 0);
+    }
+
+    85% {
+      transform: translate3d(3px, 2px, 0);
+    }
+
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
   }
+
   @keyframes tile-vibrate {
-    0% { transform: translate3d(0, 0, 0) scale(1); }
-    8% { transform: translate3d(-6px, 5px, 0) rotate(-2deg) scale(1.06); }
-    18% { transform: translate3d(7px, -6px, 0) rotate(2.5deg) scale(0.97); }
-    28% { transform: translate3d(-7px, -4px, 0) rotate(-1.5deg) scale(1.04); }
-    38% { transform: translate3d(6px, 6px, 0) rotate(2deg) scale(0.98); }
-    48% { transform: translate3d(-4px, 3px, 0) rotate(-1deg) scale(1.02); }
-    60% { transform: translate3d(4px, -3px, 0) rotate(1deg) scale(1); }
-    72% { transform: translate3d(-3px, 2px, 0) rotate(-0.5deg); }
-    85% { transform: translate3d(2px, -1px, 0) rotate(0.3deg); }
-    100% { transform: translate3d(0, 0, 0) scale(1); }
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    8% {
+      transform: translate3d(-6px, 5px, 0) rotate(-2deg) scale(1.06);
+    }
+
+    18% {
+      transform: translate3d(7px, -6px, 0) rotate(2.5deg) scale(0.97);
+    }
+
+    28% {
+      transform: translate3d(-7px, -4px, 0) rotate(-1.5deg) scale(1.04);
+    }
+
+    38% {
+      transform: translate3d(6px, 6px, 0) rotate(2deg) scale(0.98);
+    }
+
+    48% {
+      transform: translate3d(-4px, 3px, 0) rotate(-1deg) scale(1.02);
+    }
+
+    60% {
+      transform: translate3d(4px, -3px, 0) rotate(1deg) scale(1);
+    }
+
+    72% {
+      transform: translate3d(-3px, 2px, 0) rotate(-0.5deg);
+    }
+
+    85% {
+      transform: translate3d(2px, -1px, 0) rotate(0.3deg);
+    }
+
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
   }
+
   @keyframes bomb-bg-flash {
     0% {
       transform: translate(-50%, -50%) scale(0.65);
       filter: brightness(4) drop-shadow(0 0 50px #ffffff);
       opacity: 0;
     }
+
     18% {
       transform: translate(-50%, -50%) scale(1.15);
       filter: brightness(2.5) drop-shadow(0 0 45px #ff6600);
       opacity: 1;
     }
+
     40% {
       transform: translate(-50%, -50%) scale(0.98);
       filter: brightness(1.5) drop-shadow(0 0 35px #ff3300);
     }
+
     70% {
       transform: translate(-50%, -50%) scale(1.05);
       filter: brightness(1.1) drop-shadow(0 0 25px #ff2200);
     }
+
     100% {
       transform: translate(-50%, -50%) scale(1.02);
       filter: brightness(1) drop-shadow(0 0 20px #ff2200);
       opacity: 1;
     }
   }
+
   @keyframes bomb-launch {
     0% {
       transform: translate(-50%, -50%) scale(0.05) rotate(-28deg);
       filter: brightness(5) drop-shadow(0 0 50px #ffffff);
       opacity: 0;
     }
+
     15% {
       transform: translate(-50%, -50%) scale(0.45) rotate(-14deg);
       filter: brightness(3.2) drop-shadow(0 0 45px #ffcc00);
       opacity: 1;
     }
+
     38% {
       /* Massive explosive surge out towards the player! */
       transform: translate(-50%, -50%) scale(1.48) rotate(12deg);
       filter: brightness(1.9) contrast(1.3) drop-shadow(0 0 45px #ff4400) drop-shadow(0 0 80px #ff0022);
     }
+
     58% {
       /* Spring recoil */
       transform: translate(-50%, -50%) scale(0.92) rotate(-5deg);
       filter: brightness(1.25) drop-shadow(0 0 30px #ff3300);
     }
+
     78% {
       /* Elastic bounce back */
       transform: translate(-50%, -50%) scale(1.18) rotate(3deg);
       filter: brightness(1.08) drop-shadow(0 0 20px #ff2200);
     }
+
     90% {
       transform: translate(-50%, -50%) scale(1.06) rotate(-1deg);
     }
+
     100% {
       transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
       filter: brightness(1) drop-shadow(0 0 22px rgba(255, 70, 20, 0.85));
       opacity: 1;
     }
   }
+
   @keyframes smoke-puff {
     0% {
       transform: translate(-50%, -50%) translateY(0) scale(0.2) rotate(0deg);
       opacity: 0;
     }
+
     20% {
       opacity: 0.85;
       transform: translate(-50%, -50%) translate(var(--dx, 0px), -25px) scale(1.1) rotate(20deg);
     }
+
     60% {
       opacity: 0.6;
       transform: translate(-50%, -50%) translate(calc(var(--dx, 0px) * 1.4), -65px) scale(2.2) rotate(50deg);
     }
+
     100% {
       opacity: 0;
       transform: translate(-50%, -50%) translate(calc(var(--dx, 0px) * 1.8), -105px) scale(3) rotate(80deg);
     }
   }
+
   @keyframes fire-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(-50%, -50%) scale(1.22);
       filter: drop-shadow(0 0 25px rgba(255, 60, 20, 0.85)) drop-shadow(0 0 50px rgba(255, 140, 20, 0.5));
     }
+
     50% {
       transform: translate(-50%, -50%) scale(1.27);
       filter: drop-shadow(0 0 40px rgba(255, 90, 20, 1)) drop-shadow(0 0 75px rgba(255, 180, 20, 0.8));
     }
   }
+
   @keyframes nuke-flash {
     0% {
       transform: translate(-50%, -50%) scale(0.2);
       opacity: 1;
       background: radial-gradient(circle, #ffffff 0%, #ffff88 35%, #ff7700 70%, transparent 100%);
     }
+
     35% {
       transform: translate(-50%, -50%) scale(4.5);
       opacity: 0.95;
       background: radial-gradient(circle, #ffffff 0%, #ffcc00 30%, #ff3300 65%, transparent 100%);
     }
+
     100% {
       transform: translate(-50%, -50%) scale(8);
       opacity: 0;
     }
   }
+
   @keyframes shockwave-1 {
     0% {
       transform: translate(-50%, -50%) scale(0.2);
       opacity: 1;
       border-width: 8px;
     }
+
     100% {
       transform: translate(-50%, -50%) scale(4.5);
       opacity: 0;
       border-width: 1px;
     }
   }
+
   @keyframes shockwave-2 {
     0% {
       transform: translate(-50%, -50%) scale(0.25);
       opacity: 0.9;
       border-width: 6px;
     }
+
     100% {
       transform: translate(-50%, -50%) scale(5.8);
       opacity: 0;
       border-width: 1px;
     }
   }
+
   @keyframes spark {
-    0% { transform: translate(-50%, -50%) translate(0, 0) scale(1.3); opacity: 1; }
-    100% { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.1); opacity: 0; }
+    0% {
+      transform: translate(-50%, -50%) translate(0, 0) scale(1.3);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.1);
+      opacity: 0;
+    }
   }
+
   @keyframes crack {
-    0% { opacity: 0; transform: scale(0.7); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
+
   @keyframes confetti {
-    0% { transform: translate(-50%, -50%) translate(0, 0) rotate(0); opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) rotate(var(--rot, 360deg)); opacity: 0; }
+    0% {
+      transform: translate(-50%, -50%) translate(0, 0) rotate(0);
+      opacity: 1;
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) rotate(var(--rot, 360deg));
+      opacity: 0;
+    }
   }
+
   @keyframes shine {
-    0%, 55% { transform: translateX(-160%) skewX(-18deg); }
-    100% { transform: translateX(520%) skewX(-18deg); }
+
+    0%,
+    55% {
+      transform: translateX(-160%) skewX(-18deg);
+    }
+
+    100% {
+      transform: translateX(520%) skewX(-18deg);
+    }
   }
+
   @keyframes modal-in {
-    0% { transform: translateY(24px) scale(0.88); opacity: 0; }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
+    0% {
+      transform: translateY(24px) scale(0.88);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
   }
+
   @keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
+
   @keyframes flicker {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    30% { opacity: 1; transform: scale(1.06); }
-    55% { opacity: 0.78; transform: scale(0.97); }
-    75% { opacity: 0.95; transform: scale(1.03); }
+
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+
+    30% {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    55% {
+      opacity: 0.78;
+      transform: scale(0.97);
+    }
+
+    75% {
+      opacity: 0.95;
+      transform: scale(1.03);
+    }
   }
 }
 
@@ -262,19 +466,18 @@ body,
 }
 
 :root {
-  --nav-height: 86px;
+  --nav-height: 78px;
 }
 
 /* ==========================================================================
-   MOBILE LANDSCAPE RESPONSIVE SYSTEM (Applies strictly when height <= 520px)
-   STRICT RULE: Desktop UI (height > 520px) is NEVER touched.
+   MOBILE LANDSCAPE COMPACT NAVBAR (Only applies on small phones / height <= 520px)
+   On Desktop & M1 Fullscreen: Default large desktop navbar & logo remain crisp!
    ========================================================================== */
 @media (max-height: 520px) {
   :root {
     --nav-height: 38px;
   }
 
-  /* Header / Navbar */
   .mobile-land-header {
     padding-top: 2px !important;
     padding-bottom: 0px !important;
@@ -331,187 +534,215 @@ body,
   .mobile-land-icon-btn {
     height: 28px !important;
   }
+}
 
-  /* Main Stage Container */
-  .mobile-land-main {
-    padding: 2px !important;
-  }
+/* Main Stage Container */
+.mobile-land-main {
+  padding: clamp(2px, 0.5vw, 8px) !important;
+}
 
-  /* Left Panel (Betting Controls) */
-  .mobile-land-panel {
-    gap: 3px !important;
-    padding: 2px !important;
-  }
+/* Left Panel (Betting Controls) */
+.mobile-land-panel {
+  gap: clamp(2px, 0.8cqh, 6px);
+  padding: clamp(1px, 0.5cqh, 5px) !important;
+}
 
-  /* GameMode (Manual / Auto) */
-  .mobile-land-gamemode button {
-    height: 24px !important;
-    padding-top: 1px !important;
-    padding-bottom: 1px !important;
-    font-size: 10px !important;
-    gap: 3px !important;
-  }
+/* GameMode (Manual / Auto) */
+.mobile-land-gamemode div[role="tablist"] {
+  border-radius: clamp(8px, 1.5cqh, 14px);
+  padding: clamp(1.5px, 0.4cqh, 4px) !important;
+  gap: clamp(2px, 0.6cqh, 6px) !important;
+}
 
-  .mobile-land-gamemode svg {
-    width: 11px !important;
-    height: 11px !important;
-  }
+.mobile-land-gamemode button {
+  height: clamp(26px, 5.2cqh, 48px);
+  padding-top: clamp(2px, 0.5cqh, 6px);
+  padding-bottom: clamp(2px, 0.5cqh, 6px);
+  font-size: clamp(10px, 2.1cqh, 16px) !important;
+  gap: clamp(3px, 0.6cqh, 8px) !important;
+  border-radius: clamp(6px, 1.2cqh, 10px) !important;
+}
 
-  /* Bet Amount Box */
-  .mobile-land-bet-label {
-    font-size: 9px !important;
-    margin-bottom: 1px !important;
-  }
+.mobile-land-gamemode svg {
+  width: clamp(11px, 2.3cqh, 18px) !important;
+  height: clamp(11px, 2.3cqh, 18px) !important;
+}
 
-  .mobile-land-bet-input-box {
-    height: 26px !important;
-    padding: 1px 4px 1px 6px !important;
-    border-radius: 6px !important;
-  }
+/* Bet Amount Box */
+.mobile-land-bet-label {
+  font-size: clamp(9.5px, 1.9cqh, 14px) !important;
+  margin-bottom: clamp(1px, 0.3cqh, 4px) !important;
+}
 
-  .mobile-land-bet-input-box input {
-    font-size: 11px !important;
-    height: 22px !important;
-    padding-right: 2px !important;
-  }
+.mobile-land-bet-label svg {
+  width: clamp(9px, 1.7cqh, 14px) !important;
+  height: clamp(9px, 1.7cqh, 14px) !important;
+}
 
-  .mobile-land-step-btn {
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 4px !important;
-  }
+.mobile-land-bet-input-box {
+  height: clamp(28px, 5.6cqh, 48px);
+  padding: clamp(1px, 0.3cqh, 4px) clamp(4px, 1cqh, 10px) clamp(1px, 0.3cqh, 4px) clamp(8px, 2cqh, 18px);
+  border-radius: clamp(6px, 1.2cqh, 12px) !important;
+}
 
-  .mobile-land-step-btn svg {
-    width: 10px !important;
-    height: 10px !important;
-  }
+.mobile-land-bet-input-box input {
+  font-size: clamp(12px, 2.6cqh, 18px) !important;
+  height: clamp(22px, 4.4cqh, 40px) !important;
+  text-align: left !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
 
-  .mobile-land-quick-chips {
-    margin-top: 2px !important;
-    gap: 2px !important;
-  }
+.mobile-land-step-btn {
+  width: clamp(18px, 3.8cqh, 30px) !important;
+  height: clamp(18px, 3.8cqh, 30px) !important;
+  border-radius: clamp(3px, 0.8cqh, 6px) !important;
+}
 
-  .mobile-land-quick-chips button {
-    height: 19px !important;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    font-size: 9px !important;
-    border-radius: 4px !important;
-  }
+.mobile-land-step-btn svg {
+  width: clamp(9px, 1.8cqh, 15px) !important;
+  height: clamp(9px, 1.8cqh, 15px) !important;
+}
 
-  /* Mines Selector */
-  .mobile-land-mines-label {
-    font-size: 9px !important;
-    margin-bottom: 1px !important;
-  }
+.mobile-land-quick-chips {
+  margin-top: clamp(1.5px, 0.4cqh, 4px) !important;
+  gap: clamp(1.5px, 0.5cqh, 5px) !important;
+}
 
-  .mobile-land-mines-bar {
-    height: 26px !important;
-    padding: 2px !important;
-    gap: 2px !important;
-    border-radius: 6px !important;
-    grid-template-columns: 1fr 1fr 18px 1.2fr 18px 1fr 1fr !important;
-  }
+.mobile-land-quick-chips button {
+  height: clamp(20px, 3.8cqh, 32px);
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  font-size: clamp(9.5px, 1.9cqh, 13.5px) !important;
+  border-radius: clamp(3.5px, 0.8cqh, 6px) !important;
+}
 
-  .mobile-land-mines-bar button,
-  .mobile-land-mines-bar div {
-    height: 22px !important;
-    font-size: 9px !important;
-    border-radius: 4px !important;
-  }
+/* Mines Selector */
+.mobile-land-mines-label {
+  font-size: clamp(9.5px, 1.9cqh, 14px) !important;
+  margin-bottom: clamp(1px, 0.3cqh, 4px) !important;
+}
 
-  .mobile-land-mines-bar svg {
-    width: 9px !important;
-    height: 9px !important;
-  }
+.mobile-land-mines-label svg {
+  width: clamp(9px, 1.7cqh, 14px) !important;
+  height: clamp(9px, 1.7cqh, 14px) !important;
+}
 
-  /* Cashout / Bet Action Button */
-  .mobile-land-cashout-btn {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    border-radius: 8px !important;
-  }
+.mobile-land-mines-bar {
+  height: clamp(28px, 5.6cqh, 48px);
+  padding: clamp(1.5px, 0.3cqh, 4px);
+  gap: clamp(1.5px, 0.4cqh, 5px) !important;
+  border-radius: clamp(6px, 1.2cqh, 12px) !important;
+  grid-template-columns: 1fr 1fr clamp(16px, 3.4cqh, 30px) 1.2fr clamp(16px, 3.4cqh, 30px) 1fr 1fr !important;
+}
 
-  .mobile-land-cashout-btn span.cashout-label {
-    font-size: 11px !important;
-    gap: 4px !important;
-  }
+.mobile-land-mines-bar button,
+.mobile-land-mines-bar div {
+  height: clamp(22px, 4.6cqh, 40px);
+  font-size: clamp(10.5px, 2.2cqh, 16px) !important;
+  border-radius: clamp(4px, 0.9cqh, 8px) !important;
+}
 
-  .mobile-land-cashout-btn span.cashout-label svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
+.mobile-land-mines-bar svg {
+  width: clamp(9px, 1.9cqh, 15px) !important;
+  height: clamp(9px, 1.9cqh, 15px) !important;
+}
 
-  .mobile-land-cashout-btn span.cashout-sub {
-    font-size: 9px !important;
-    margin-top: 0px !important;
-  }
+/* Cashout / Bet Action Button */
+.mobile-land-cashout-btn {
+  padding-top: clamp(6px, 1.6cqh, 16px);
+  padding-bottom: clamp(6px, 1.6cqh, 16px);
+  padding-left: clamp(6px, 1.8cqh, 18px) !important;
+  padding-right: clamp(6px, 1.8cqh, 18px) !important;
+  border-radius: clamp(8px, 1.8cqh, 18px) !important;
+}
 
-  /* Game Details */
-  .mobile-land-details {
-    padding: 3px !important;
-    border-radius: 8px !important;
-  }
+.mobile-land-cashout-btn span.cashout-label {
+  font-size: clamp(12px, 2.8cqh, 20px) !important;
+  gap: clamp(3px, 0.7cqh, 8px) !important;
+}
 
-  .mobile-land-details-header {
-    padding: 1px 4px !important;
-    margin-bottom: 2px !important;
-    font-size: 9px !important;
-    gap: 3px !important;
-    border-radius: 4px !important;
-  }
+.mobile-land-cashout-btn span.cashout-label svg {
+  width: clamp(13px, 2.8cqh, 20px) !important;
+  height: clamp(13px, 2.8cqh, 20px) !important;
+}
 
-  .mobile-land-details-header svg {
-    width: 10px !important;
-    height: 10px !important;
-  }
+.mobile-land-cashout-btn span.cashout-sub {
+  font-size: clamp(9.5px, 2.1cqh, 15px) !important;
+  margin-top: clamp(1px, 0.2cqh, 3px) !important;
+}
 
-  .mobile-land-details-row {
-    padding: 1px 4px !important;
-    margin-top: 1px !important;
-    margin-bottom: 1px !important;
-    border-radius: 4px !important;
-  }
+/* Game Details (Bottom Box) */
+.mobile-land-details {
+  padding: clamp(4px, 1.0cqh, 10px) clamp(5px, 1.4cqh, 12px);
+  border-radius: clamp(8px, 1.6cqh, 16px);
+}
 
-  .mobile-land-details-row span {
-    font-size: 8.5px !important;
-  }
+.mobile-land-details-header {
+  padding: clamp(2px, 0.5cqh, 5px) clamp(4px, 1.0cqh, 10px) !important;
+  margin-bottom: clamp(2px, 0.4cqh, 5px) !important;
+  font-size: clamp(10px, 2.2cqh, 15px) !important;
+  gap: clamp(3px, 0.6cqh, 7px) !important;
+  border-radius: clamp(4px, 0.9cqh, 8px) !important;
+}
 
-  .mobile-land-details-row img,
-  .mobile-land-details-row svg {
-    width: 10px !important;
-    height: 10px !important;
-  }
+.mobile-land-details-header svg {
+  width: clamp(10px, 2.1cqh, 16px) !important;
+  height: clamp(10px, 2.1cqh, 16px) !important;
+}
 
-  /* Multiplier Bar */
-  .mobile-land-multiplier-box {
-    padding: 2px !important;
-    gap: 2px !important;
-    border-radius: 6px !important;
-  }
+.mobile-land-details-row {
+  padding: clamp(2.5px, 0.7cqh, 7px) clamp(5px, 1.2cqh, 10px);
+  margin-top: clamp(1px, 0.3cqh, 3px) !important;
+  margin-bottom: clamp(1px, 0.3cqh, 3px) !important;
+  border-radius: clamp(3.5px, 0.8cqh, 6px) !important;
+}
 
-  .mobile-land-multiplier-item {
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
-    padding-left: 2px !important;
-    padding-right: 2px !important;
-    font-size: 9.5px !important;
-    border-radius: 4px !important;
-  }
+.mobile-land-details-row span {
+  font-size: clamp(9.5px, 2.0cqh, 14px) !important;
+}
 
-  /* Game Board Grid */
-  .mobile-land-grid-wrapper {
-    padding: 2px !important;
-  }
+.mobile-land-details-row img,
+.mobile-land-details-row svg {
+  width: clamp(10px, 2.1cqh, 16px) !important;
+  height: clamp(10px, 2.1cqh, 16px) !important;
+}
 
-  .mobile-land-grid {
-    gap: 2px !important;
-  }
+/* Multiplier Bar */
+.mobile-land-multiplier-box {
+  padding: clamp(2px, 0.6cqh, 6px) !important;
+  gap: clamp(2px, 0.6cqh, 6px) !important;
+  border-radius: clamp(8px, 1.8cqh, 16px);
+}
 
-  .mobile-land-tile-screw {
-    width: 4px !important;
-    height: 4px !important;
-  }
+.mobile-land-multiplier-item {
+  padding: clamp(2px, 0.6cqh, 8px) clamp(1px, 0.4cqh, 6px) !important;
+  font-size: clamp(8.5px, 1.8cqh, 14px) !important;
+  border-radius: clamp(4px, 0.9cqh, 8px) !important;
+}
+
+/* Game Board Grid */
+.mobile-land-grid-wrapper {
+  padding: clamp(1px, 0.4cqh, 8px) !important;
+}
+
+.mobile-land-grid {
+  gap: clamp(1.5px, 0.5cqh, 6px) !important;
+}
+
+.mobile-land-tile-screw {
+  width: clamp(3px, 0.7cqh, 7px) !important;
+  height: clamp(3px, 0.7cqh, 7px) !important;
+}
+
+/* Scrollbar utilities */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 body {
@@ -530,12 +761,14 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type="number"] {
   -moz-appearance: textfield;
 }
 
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
