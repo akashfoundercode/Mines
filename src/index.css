@@ -729,10 +729,11 @@ body,
    GAME RESULT MODALS (GameOverModal & WinModal) - Fluid Responsive Sizing
    ========================================================================== */
 .modal-result-card {
-  padding: clamp(6px, 2.6cqh, 22px) clamp(10px, 3.2cqw, 24px) !important;
+  padding: clamp(8px, 2.4cqh, 22px) clamp(12px, 3.0cqw, 24px) !important;
   border-radius: clamp(12px, 3.0cqh, 24px) !important;
-  max-height: 96% !important;
-  width: min(92%, 400px) !important;
+  max-height: 94% !important;
+  width: min(92%, 380px) !important;
+  gap: clamp(2px, 0.7cqh, 6px) !important;
 }
 
 .modal-result-bomb-box {

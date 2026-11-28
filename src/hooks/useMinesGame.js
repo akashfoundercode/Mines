@@ -1,38 +1,56 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   GRID_SIZE,
   MAX_BET,
   MAX_MINES,
   MIN_BET,
   MIN_MINES,
-  generateMines,
   getMineRisk,
   getMultiplier,
   getMultiplierWindow,
   randomInt,
   roundMoney,
 } from '../utils/gameLogic.js';
+import {
+  addWalletFunds,
+  getWalletBalance,
+} from '../services/walletService.js';
+import {
+  cashOutApi,
+  getActiveRound,
+  revealTileApi,
+  startRoundApi,
+} from '../services/gameService.js';
+import { getAuthToken } from '../services/axiosInstance.js';
 import { sounds } from '../utils/sound.js';
 
-const START_BALANCE = 1000;
+const START_BALANCE = 0;
 const TOP_UP = 500;
 
 /**
  * All game state and rules live here; components only render.
  * status: 'idle' | 'playing' | 'lost' | 'won'
- *
- * Demo only: balance and mine positions live in the browser. A real-money game
- * must generate mines and settle bets on a server.
  */
-export function useMinesGame() {
-  const [balance, setBalance] = useState(START_BALANCE);
+export function useMinesGame({ onUnauthorized, initialAccount } = {}) {
+  const [balance, setBalance] = useState(() => Number(initialAccount?.wallet ?? initialAccount?.total_wallet ?? START_BALANCE));
+  const [winningWallet, setWinningWallet] = useState(() => Number(initialAccount?.winning_wallet ?? initialAccount?.winningWallet ?? 0));
+  const [bonusBalance, setBonusBalance] = useState(() => Number(initialAccount?.bonus ?? 0));
+  const [walletProfile, setWalletProfile] = useState(() => initialAccount ? {
+    id: initialAccount.id,
+    username: initialAccount.username,
+    mobile: initialAccount.mobile,
+    email: initialAccount.email,
+    u_id: initialAccount.u_id,
+    userimage: initialAccount.userimage ?? null,
+  } : null);
   const [betAmount, setBetAmount] = useState(10);
   const [minesCount, setMinesCountState] = useState(3);
+  const [activeMinesCount, setActiveMinesCount] = useState(3);
   const [mode, setModeState] = useState('manual');
   const [soundOn, setSoundOn] = useState(true);
 
   const [status, setStatus] = useState('idle');
-  const [mines, setMines] = useState([]); // fixed for the whole round
+  const [mines, setMines] = useState([]); // revealed by server only after round ends
   const [revealed, setRevealed] = useState([]);
   const [activeBet, setActiveBet] = useState(0);
   const [explodedTile, setExplodedTile] = useState(null);
@@ -45,6 +63,10 @@ export function useMinesGame() {
   const [autoPicks, setAutoPicksState] = useState(3);
   const [autoLeft, setAutoLeft] = useState(0);
 
+  const [isPending, setIsPending] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const pendingRef = useRef(false);
+
   const play = useCallback(
     (name) => {
       if (soundOn) sounds[name]?.();
@@ -52,8 +74,74 @@ export function useMinesGame() {
     [soundOn],
   );
 
+  const clearApiError = useCallback(() => setApiError(null), []);
+
+  // Auto-dismiss error toast after 4.5 seconds
+  useEffect(() => {
+    if (!apiError) return undefined;
+    const t = setTimeout(() => setApiError(null), 4500);
+    return () => clearTimeout(t);
+  }, [apiError]);
+
+  // Initial sync: load wallet balance & resume active round if any
+  useEffect(() => {
+    let cancelled = false;
+    getAuthToken(); // persist ?token= from URL if present
+
+    async function init() {
+      const [walletRes, activeRes] = await Promise.allSettled([
+        getWalletBalance(),
+        getActiveRound(),
+      ]);
+
+      if (cancelled) return;
+
+      if (walletRes.status === 'fulfilled' && walletRes.value) {
+        const b = walletRes.value.balance ?? walletRes.value.walletBalance;
+        if (Number.isFinite(Number(b))) {
+          setBalance(roundMoney(Number(b)));
+        }
+        setWinningWallet(roundMoney(Number(walletRes.value.winningWallet ?? 0)));
+        setBonusBalance(roundMoney(Number(walletRes.value.bonus ?? 0)));
+        setWalletProfile(walletRes.value.profile ?? null);
+      } else if (walletRes.status === 'rejected' && walletRes.reason?.status === 401) {
+        onUnauthorized?.();
+        return;
+      }
+
+      if (activeRes.status === 'fulfilled' && activeRes.value) {
+        const round = activeRes.value.round ?? activeRes.value;
+        if (round && round.status === 'playing' && round.roundId) {
+          const rMines = Number(round.minesCount ?? round.mines ?? 3);
+          const rBet = Number(round.betAmount ?? round.bet ?? 10);
+          const rRevealed = Array.isArray(round.revealedTiles)
+            ? round.revealedTiles
+            : Array.isArray(round.revealed)
+              ? round.revealed
+              : [];
+          setRoundId(round.roundId);
+          setActiveBet(roundMoney(rBet));
+          setBetAmount(roundMoney(rBet));
+          setMinesCountState(rMines);
+          setActiveMinesCount(rMines);
+          setRevealed(rRevealed);
+          setMines([]);
+          setExplodedTile(null);
+          setResult(null);
+          setShowResult(false);
+          setStatus('playing');
+        }
+      }
+    }
+
+    init();
+    return () => {
+      cancelled = true;
+    };
+  }, [onUnauthorized]);
+
   // ---- derived values ------------------------------------------------------
-  const roundMines = status === 'idle' ? minesCount : mines.length;
+  const roundMines = status === 'idle' ? minesCount : activeMinesCount;
   const openedCount = revealed.length;
   const totalGems = GRID_SIZE - roundMines;
   const multiplier = getMultiplier(openedCount, roundMines);
@@ -65,8 +153,8 @@ export function useMinesGame() {
     () => getMultiplierWindow(openedCount, roundMines),
     [openedCount, roundMines],
   );
-  const canBet = status !== 'playing' && betAmount >= MIN_BET && betAmount <= balance;
-  const canCashOut = status === 'playing' && openedCount > 0;
+  const canBet = !isPending && status !== 'playing' && betAmount >= MIN_BET && betAmount <= balance;
+  const canCashOut = !isPending && status === 'playing' && openedCount > 0;
 
   // ---- settings ------------------------------------------------------------
   const resetRound = useCallback(() => {
@@ -121,81 +209,215 @@ export function useMinesGame() {
   }, []);
 
   const toggleSound = useCallback(() => setSoundOn((s) => !s), []);
-  const addFunds = useCallback(() => setBalance((b) => roundMoney(b + TOP_UP)), []);
-  const resetDemo = useCallback(() => {
+
+  const addFunds = useCallback(async () => {
+    if (pendingRef.current) return;
+    pendingRef.current = true;
+    setIsPending(true);
+    setApiError(null);
+    try {
+      const res = await addWalletFunds(TOP_UP);
+      const nextBalance = res?.balance ?? res?.walletBalance;
+      if (Number.isFinite(Number(nextBalance))) {
+        setBalance(roundMoney(Number(nextBalance)));
+      } else {
+        setBalance((b) => roundMoney(b + TOP_UP));
+      }
+      if (res?.profile) setWalletProfile(res.profile);
+    } catch (err) {
+      setApiError(err.message || 'Failed to add funds');
+    } finally {
+      pendingRef.current = false;
+      setIsPending(false);
+    }
+  }, []);
+
+  const resetDemo = useCallback(async () => {
     setAutoRunning(false);
-    setBalance(START_BALANCE);
     resetRound();
-  }, [resetRound]);
+    try {
+      const res = await getWalletBalance();
+      const b = res?.balance ?? res?.walletBalance;
+      if (Number.isFinite(Number(b))) setBalance(roundMoney(Number(b)));
+      setWinningWallet(roundMoney(Number(res?.winningWallet ?? 0)));
+      setBonusBalance(roundMoney(Number(res?.bonus ?? 0)));
+      setWalletProfile(res?.profile ?? null);
+    } catch {
+      // Ignore if offline
+    }
+  }, [resetRound, onUnauthorized]);
 
   // ---- round flow ----------------------------------------------------------
-  const startRound = useCallback(() => {
-    if (status === 'playing') return false;
+  const startRound = useCallback(async () => {
+    if (pendingRef.current || status === 'playing') return false;
     if (betAmount < MIN_BET || betAmount > balance) return false;
-    setBalance((b) => roundMoney(b - betAmount));
-    setActiveBet(betAmount);
-    setMines(generateMines(minesCount)); // placed once, stays fixed all round
-    setRevealed([]);
-    setExplodedTile(null);
-    setResult(null);
-    setShowResult(false);
-    setRoundId((id) => id + 1);
-    setStatus('playing');
-    play('click');
-    return true;
+
+    pendingRef.current = true;
+    setIsPending(true);
+    setApiError(null);
+
+    try {
+      const res = await startRoundApi({ betAmount, minesCount });
+      const nextBalance = res?.balance ?? res?.walletBalance;
+      const nextRoundId = res?.roundId ?? res?.id ?? Date.now();
+      const serverMinesCount = Number(res?.minesCount ?? minesCount);
+
+      if (Number.isFinite(Number(nextBalance))) {
+        setBalance(roundMoney(Number(nextBalance)));
+      } else {
+        setBalance((b) => roundMoney(b - betAmount));
+      }
+
+      setActiveBet(betAmount);
+      setActiveMinesCount(serverMinesCount);
+      setMines([]); // hidden on server during active round
+      setRevealed(
+        Array.isArray(res?.revealedTiles)
+          ? res.revealedTiles
+          : Array.isArray(res?.revealed)
+            ? res.revealed
+            : [],
+      );
+      setExplodedTile(null);
+      setResult(null);
+      setShowResult(false);
+      setRoundId(nextRoundId);
+      setStatus('playing');
+      play('click');
+      return true;
+    } catch (err) {
+      setApiError(err.message || 'Could not start round');
+      setAutoRunning(false);
+      return false;
+    } finally {
+      pendingRef.current = false;
+      setIsPending(false);
+    }
   }, [status, betAmount, balance, minesCount, play]);
 
-  const settleWin = useCallback(
-    (picks) => {
-      const mult = getMultiplier(picks.length, mines.length);
-      const payout = roundMoney(activeBet * mult);
-      setBalance((b) => roundMoney(b + payout));
+  const applyWinState = useCallback(
+    (res, picksCount) => {
+      const mult = Number(
+        res?.multiplier ?? getMultiplier(picksCount, activeMinesCount),
+      );
+      const payout = roundMoney(
+        Number(res?.payout ?? activeBet * mult),
+      );
+      const nextBalance = res?.balance ?? res?.walletBalance;
+
+      if (Number.isFinite(Number(nextBalance))) {
+        setBalance(roundMoney(Number(nextBalance)));
+      } else {
+        setBalance((b) => roundMoney(b + payout));
+      }
+
+      if (Array.isArray(res?.mines)) {
+        setMines(res.mines);
+      }
+      if (Array.isArray(res?.revealedTiles)) {
+        setRevealed(res.revealedTiles);
+      }
+
       setResult({
         outcome: 'won',
         bet: activeBet,
         multiplier: mult,
         payout,
-        profit: roundMoney(payout - activeBet),
-        gems: picks.length,
-        mines: mines.length,
-        roundId,
+        profit: roundMoney(res?.profit ?? payout - activeBet),
+        gems: res?.gems ?? picksCount,
+        mines: res?.minesCount ?? activeMinesCount,
+        roundId: res?.roundId ?? roundId,
       });
       setStatus('won');
       play('win');
     },
-    [mines.length, activeBet, roundId, play],
+    [activeMinesCount, activeBet, roundId, play],
   );
 
-  const cashOut = useCallback(() => {
-    if (status !== 'playing' || revealed.length === 0) return;
-    settleWin(revealed);
-  }, [status, revealed, settleWin]);
+  const cashOut = useCallback(async () => {
+    if (pendingRef.current || status !== 'playing' || revealed.length === 0) return;
+
+    pendingRef.current = true;
+    setIsPending(true);
+    setApiError(null);
+
+    try {
+      const res = await cashOutApi({ roundId });
+      applyWinState(res, revealed.length);
+    } catch (err) {
+      setApiError(err.message || 'Cash out failed');
+      setAutoRunning(false);
+    } finally {
+      pendingRef.current = false;
+      setIsPending(false);
+    }
+  }, [status, revealed.length, roundId, applyWinState]);
 
   const revealTile = useCallback(
-    (index) => {
-      if (status !== 'playing' || revealed.includes(index)) return;
-      if (mines.includes(index)) {
-        setExplodedTile(index);
-        setResult({
-          outcome: 'lost',
-          bet: activeBet,
-          multiplier: 0,
-          payout: 0,
-          profit: -activeBet,
-          gems: revealed.length,
-          mines: mines.length,
-          roundId,
-        });
-        setStatus('lost');
-        play('explode');
-        return;
+    async (index) => {
+      if (pendingRef.current || status !== 'playing' || revealed.includes(index)) return;
+
+      pendingRef.current = true;
+      setIsPending(true);
+      setApiError(null);
+
+      try {
+        const res = await revealTileApi({ roundId, tileIndex: index });
+        const hitMine =
+          res?.isMine === true ||
+          res?.hitMine === true ||
+          res?.outcome === 'lost' ||
+          res?.status === 'lost';
+
+        if (hitMine) {
+          if (Array.isArray(res?.mines)) {
+            setMines(res.mines);
+          }
+          const nextBalance = res?.balance ?? res?.walletBalance;
+          if (Number.isFinite(Number(nextBalance))) {
+            setBalance(roundMoney(Number(nextBalance)));
+          }
+          setExplodedTile(index);
+          setResult({
+            outcome: 'lost',
+            bet: activeBet,
+            multiplier: 0,
+            payout: 0,
+            profit: -activeBet,
+            gems: res?.gems ?? Math.max(0, (res?.revealedTiles?.length ?? revealed.length + 1) - 1),
+            mines: res?.minesCount ?? activeMinesCount,
+            roundId: res?.roundId ?? roundId,
+          });
+          setStatus('lost');
+          play('explode');
+          return;
+        }
+
+        const next = Array.isArray(res?.revealedTiles)
+          ? res.revealedTiles
+          : Array.isArray(res?.revealed)
+            ? res.revealed
+            : [...revealed, index];
+        setRevealed(next);
+        play('reveal');
+
+        const isWon =
+          res?.status === 'won' ||
+          res?.outcome === 'won' ||
+          next.length >= GRID_SIZE - activeMinesCount;
+
+        if (isWon) {
+          applyWinState(res, next.length);
+        }
+      } catch (err) {
+        setApiError(err.message || 'Failed to reveal tile');
+        setAutoRunning(false);
+      } finally {
+        pendingRef.current = false;
+        setIsPending(false);
       }
-      const next = [...revealed, index];
-      setRevealed(next);
-      play('reveal');
-      if (next.length === GRID_SIZE - mines.length) settleWin(next); // cleared the board
     },
-    [status, revealed, mines, activeBet, roundId, play, settleWin],
+    [status, revealed, roundId, activeBet, activeMinesCount, play, applyWinState],
   );
 
   // ---- result overlay (delayed so the explosion / reveal is visible first) --
@@ -217,7 +439,7 @@ export function useMinesGame() {
 
   // Start the next auto round.
   useEffect(() => {
-    if (!autoRunning || status === 'playing') return undefined;
+    if (!autoRunning || status === 'playing' || isPending) return undefined;
     const t = setTimeout(
       () => {
         if (autoLeft <= 0 || betAmount > balance) {
@@ -230,26 +452,29 @@ export function useMinesGame() {
       status === 'idle' ? 150 : 900,
     );
     return () => clearTimeout(t);
-  }, [autoRunning, status, autoLeft, betAmount, balance, startRound]);
+  }, [autoRunning, status, isPending, autoLeft, betAmount, balance, startRound]);
 
   // Pick tiles during an auto round, then cash out.
   useEffect(() => {
-    if (!autoRunning || status !== 'playing') return undefined;
+    if (!autoRunning || status !== 'playing' || isPending) return undefined;
     const t = setTimeout(() => {
-      if (revealed.length >= Math.min(autoPicks, GRID_SIZE - mines.length)) {
+      if (revealed.length >= Math.min(autoPicks, GRID_SIZE - activeMinesCount)) {
         cashOut();
         return;
       }
       const pool = [];
       for (let i = 0; i < GRID_SIZE; i++) if (!revealed.includes(i)) pool.push(i);
-      revealTile(pool[randomInt(pool.length)]);
+      if (pool.length > 0) revealTile(pool[randomInt(pool.length)]);
     }, 450);
     return () => clearTimeout(t);
-  }, [autoRunning, status, revealed, mines.length, autoPicks, cashOut, revealTile]);
+  }, [autoRunning, status, isPending, revealed, activeMinesCount, autoPicks, cashOut, revealTile]);
 
   return {
     // state
     balance,
+    winningWallet,
+    bonusBalance,
+    walletProfile,
     betAmount,
     minesCount,
     mode,
@@ -265,6 +490,8 @@ export function useMinesGame() {
     autoRounds,
     autoPicks,
     autoLeft,
+    isPending,
+    apiError,
     // derived
     multiplier,
     potentialWin,
@@ -291,6 +518,7 @@ export function useMinesGame() {
     cashOut,
     resetRound,
     dismissResult: () => setShowResult(false),
+    clearApiError,
     startAuto,
     stopAuto,
   };

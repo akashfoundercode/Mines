@@ -1,15 +1,10 @@
-import { Trophy, X, Medal, Flame } from 'lucide-react';
+import { Trophy, X, Flame, Loader2 } from 'lucide-react';
 import { formatMoney } from '../utils/gameLogic.js';
-
-const LEADERBOARD_DATA = [
-  { rank: 1, name: 'Aarav Sharma', score: 'x48.50', win: 97000, mines: 5, badge: '🥇' },
-  { rank: 2, name: 'Rohan Gupta', score: 'x32.20', win: 64400, mines: 7, badge: '🥈' },
-  { rank: 3, name: 'Priya Patel', score: 'x24.80', win: 49600, mines: 3, badge: '🥉' },
-  { rank: 4, name: 'Vikram Singh', score: 'x18.40', win: 36800, mines: 4, badge: '4' },
-  { rank: 5, name: 'Ananya Verma', score: 'x14.60', win: 29200, mines: 3, badge: '5' },
-];
+import { useLeaderboard } from '../hooks/useLeaderboard.js';
 
 export default function LeaderboardModal({ onClose }) {
+  const { players, loading, error } = useLeaderboard();
+
   return (
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-black/75 p-3 backdrop-blur-md animate-fade-in select-none"
@@ -43,38 +38,59 @@ export default function LeaderboardModal({ onClose }) {
         </div>
 
         {/* Players List */}
-        <div className="mt-3 sm:mt-4 space-y-2">
-          {LEADERBOARD_DATA.map((player) => (
-            <div
-              key={player.rank}
-              className={`flex items-center justify-between rounded-xl border p-2 sm:p-2.5 transition ${
-                player.rank === 1
-                  ? 'border-[#ffc107] bg-gradient-to-r from-[#4a260c] to-[#2b1506] shadow-[0_0_15px_rgba(255,193,7,0.3)]'
-                  : 'border-[#593214]/60 bg-[#1e1006]/80'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="text-base sm:text-lg font-black w-6 text-center text-[#ffc107]">
-                  {player.badge}
-                </span>
-                <div>
-                  <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
-                    {player.name}
-                    {player.rank === 1 && <Flame className="size-3.5 text-[#ff7043] inline" />}
-                  </div>
-                  <div className="text-[10px] text-[#bda086]">
-                    {player.mines} Mines · <span className="text-[#ffe396] font-semibold">{player.score}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-xs sm:text-sm font-black text-[#ffc107] tabular-nums">
-                  {formatMoney(player.win)}
-                </div>
-                <div className="text-[9px] uppercase tracking-wider text-[#00d2ff] font-semibold">Won</div>
-              </div>
+        <div className="mt-3 sm:mt-4 space-y-2 min-h-[160px] max-h-[60dvh] overflow-y-auto scrollbar-none">
+          {loading && (
+            <div className="flex flex-col items-center justify-center py-10 gap-2 text-[#d8c2aa]">
+              <Loader2 className="size-6 animate-spin text-[#ffc107]" />
+              <span className="text-xs">Loading live leaderboard...</span>
             </div>
-          ))}
+          )}
+
+          {!loading && error && (
+            <div className="rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-center text-xs text-red-200">
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && players.length === 0 && (
+            <div className="py-10 text-center text-xs text-[#bda086]">
+              No leaderboard entries yet.
+            </div>
+          )}
+
+          {!loading &&
+            !error &&
+            players.map((player) => (
+              <div
+                key={`${player.rank}-${player.name}`}
+                className={`flex items-center justify-between rounded-xl border p-2 sm:p-2.5 transition ${
+                  player.rank === 1
+                    ? 'border-[#ffc107] bg-gradient-to-r from-[#4a260c] to-[#2b1506] shadow-[0_0_15px_rgba(255,193,7,0.3)]'
+                    : 'border-[#593214]/60 bg-[#1e1006]/80'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base sm:text-lg font-black w-6 text-center text-[#ffc107]">
+                    {player.badge}
+                  </span>
+                  <div>
+                    <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                      {player.name}
+                      {player.rank === 1 && <Flame className="size-3.5 text-[#ff7043] inline" />}
+                    </div>
+                    <div className="text-[10px] text-[#bda086]">
+                      {player.mines} Mines · <span className="text-[#ffe396] font-semibold">{player.score}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm font-black text-[#ffc107] tabular-nums">
+                    {formatMoney(player.win)}
+                  </div>
+                  <div className="text-[9px] uppercase tracking-wider text-[#00d2ff] font-semibold">Won</div>
+                </div>
+              </div>
+            ))}
         </div>
 
         {/* Footer info */}

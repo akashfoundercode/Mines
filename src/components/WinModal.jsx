@@ -21,7 +21,7 @@ const PARTICLES = Array.from({ length: 32 }, (_, i) => {
 
 function WinParticles() {
   return (
-    <div className="pointer-events-none absolute left-1/2 top-14 sm:top-24 size-0" aria-hidden="true">
+    <div className="pointer-events-none absolute left-1/2 top-1/3 size-0" aria-hidden="true">
       {PARTICLES.map((p, i) => (
         <span
           key={i}
@@ -46,14 +46,13 @@ function WinParticles() {
 export default function WinModal({ result, onNewGame, onDismiss }) {
   return (
     <div
-      className="absolute inset-0 z-30 flex items-center justify-center rounded-[inherit] bg-ink/75 p-1 sm:p-2 md:p-4 backdrop-blur-sm overflow-hidden"
+      className="absolute inset-0 z-30 flex items-center justify-center rounded-[inherit] bg-ink/75 p-1.5 sm:p-3 md:p-4 backdrop-blur-sm overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-labelledby="win-title"
     >
-      <div className="modal-result-card relative w-full max-w-sm animate-modal-in rounded-3xl border border-gold/70 bg-gradient-to-b from-[#16294a]/95 to-[#0b1426]/95 text-center shadow-[0_0_60px_rgba(255,189,69,.4),0_0_90px_rgba(0,210,255,.2),inset_0_1px_0_rgba(255,255,255,.12)] flex flex-col items-center justify-between overflow-y-auto scrollbar-none">
-        <WinParticles />
-
+      <WinParticles />
+      <div className="modal-result-card relative w-full max-w-sm animate-modal-in rounded-3xl border border-gold/70 bg-gradient-to-b from-[#16294a]/95 to-[#0b1426]/95 text-center shadow-[0_0_60px_rgba(255,189,69,.4),0_0_90px_rgba(0,210,255,.2),inset_0_1px_0_rgba(255,255,255,.12)] flex flex-col items-center justify-center overflow-y-auto scrollbar-none">
         <img
           src={diamondImg}
           alt="Winner Diamond"

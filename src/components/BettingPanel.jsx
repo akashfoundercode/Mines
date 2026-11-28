@@ -3,7 +3,7 @@ import BetAmount from './BetAmount.jsx';
 import MinesSelector from './MinesSelector.jsx';
 import AutoSettings from './AutoSettings.jsx';
 import CashOutButton from './CashOutButton.jsx';
-import GameDetails from './GameDetails.jsx';
+import LeaderboardPanel from './LeaderboardPanel.jsx';
 
 export default function BettingPanel({ game }) {
   const playing = game.status === 'playing';
@@ -91,11 +91,7 @@ export default function BettingPanel({ game }) {
         onClick={actionClick}
       />
 
-      <GameDetails
-        gemsLeft={game.gemsLeft}
-        mineRisk={game.mineRisk}
-        opened={game.openedCount}
-      />
+      <LeaderboardPanel />
     </aside>
   );
 }
